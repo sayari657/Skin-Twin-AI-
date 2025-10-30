@@ -1,0 +1,52 @@
+🚀 COMMANDES POUR DÉMARRER SKIN TWIN AI
+==========================================
+
+📋 PRÉREQUIS :
+- Python 3.8+ installé
+- Node.js 16+ installé
+- Ouvrir 2 terminaux séparés
+
+🚀 DÉMARRAGE EN 2 ÉTAPES :
+
+TERMINAL 1 - BACKEND DJANGO :
+=============================
+cd "C:\Users\Mohamed\Desktop\skin twin ai\skin-twin-ai\backend"
+python manage.py runserver 127.0.0.1:8000
+
+TERMINAL 2 - FRONTEND REACT :
+=============================
+cd "C:\Users\Mohamed\Desktop\skin twin ai\skin-twin-ai\frontend"
+npm start
+
+🌐 ACCÈS À L'APPLICATION :
+==========================
+- Frontend React : http://localhost:3000
+- Backend Django : http://127.0.0.1:8000
+- Admin Django : http://127.0.0.1:8000/admin
+
+✅ C'EST TOUT ! L'APPLICATION EST PRÊTE !
+
+🎯 FONCTIONNALITÉS DISPONIBLES :
+==================================
+- Assistant IA intelligent et déplaçable
+- Analyse de peau automatique
+- Base de données de 112 produits
+- Mode vocal intégré
+- Chat contextuel personnalisé
+
+🐛 EN CAS DE PROBLÈME :
+=======================
+- Port 3000 occupé : npx kill-port 3000
+- Port 8000 occupé : npx kill-port 8000
+- Erreur module : npm install dans frontend/
+- Erreur Python : vérifier l'installation Python
+
+📱 UTILISATION :
+================
+1. S'inscrire/Se connecter
+2. Cliquer sur "🎤 Parler à l'IA"
+3. Glisser l'assistant où vous voulez
+4. Taper ou parler votre question
+5. Recevoir des conseils personnalisés
+
+🎉 BON DÉVELOPPEMENT !

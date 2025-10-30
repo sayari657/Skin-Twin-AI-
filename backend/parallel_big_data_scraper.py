@@ -1,0 +1,600 @@
+"""
+Système de scraping Big Data parallélisé pour collecter des milliers de produits avec images
+"""
+
+import os
+import sys
+import django
+import requests
+import time
+import random
+import concurrent.futures
+from urllib.parse import urljoin, urlparse
+from bs4 import BeautifulSoup
+import json
+from datetime import datetime
+import threading
+import queue
+import re
+
+# Configuration Django
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'skin_ai.settings')
+django.setup()
+
+from recommendations.models import Product
+
+class ParallelBigDataScraper:
+    def __init__(self, max_workers=10):
+        self.max_workers = max_workers
+        self.base_headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+            'Accept-Language': 'fr-FR,fr;q=0.9,en;q=0.8',
+            'Accept-Encoding': 'gzip, deflate, br',
+            'Connection': 'keep-alive',
+            'Upgrade-Insecure-Requests': '1',
+        }
+        
+        # Sources étendues pour Big Data
+        self.sources = {
+            'amazon': {
+                'base_url': 'https://www.amazon.fr',
+                'search_terms': [
+                    'crème visage', 'sérum visage', 'nettoyant visage', 'masque visage',
+                    'anti-âge', 'hydratant visage', 'exfoliant visage', 'tonique visage',
+                    'crème anti-rides', 'sérum vitamine C', 'nettoyant micellaire',
+                    'masque hydratant', 'crème jour', 'crème nuit', 'sérum anti-âge',
+                    'nettoyant gel', 'crème sensible', 'sérum éclat', 'masque purifiant'
+                ],
+                'max_pages': 25
+            },
+            'sephora': {
+                'base_url': 'https://www.sephora.fr',
+                'search_terms': [
+                    'crème visage', 'sérum visage', 'nettoyant visage', 'masque visage',
+                    'anti-âge', 'hydratant visage', 'exfoliant visage', 'tonique visage',
+                    'crème anti-rides', 'sérum vitamine C', 'nettoyant micellaire'
+                ],
+                'max_pages': 20
+            },
+            'nocibe': {
+                'base_url': 'https://www.nocibe.fr',
+                'search_terms': [
+                    'crème visage', 'sérum visage', 'nettoyant visage', 'masque visage',
+                    'anti-âge', 'hydratant visage', 'exfoliant visage'
+                ],
+                'max_pages': 15
+            },
+            'marionnaud': {
+                'base_url': 'https://www.marionnaud.fr',
+                'search_terms': [
+                    'crème visage', 'sérum visage', 'nettoyant visage', 'masque visage',
+                    'anti-âge', 'hydratant visage'
+                ],
+                'max_pages': 15
+            },
+            'douglas': {
+                'base_url': 'https://www.douglas.fr',
+                'search_terms': [
+                    'crème visage', 'sérum visage', 'nettoyant visage', 'masque visage',
+                    'anti-âge', 'hydratant visage'
+                ],
+                'max_pages': 15
+            },
+            'lookfantastic': {
+                'base_url': 'https://www.lookfantastic.fr',
+                'search_terms': [
+                    'crème visage', 'sérum visage', 'nettoyant visage', 'masque visage',
+                    'anti-âge', 'hydratant visage'
+                ],
+                'max_pages': 15
+            },
+            'feelunique': {
+                'base_url': 'https://www.feelunique.com',
+                'search_terms': [
+                    'crème visage', 'sérum visage', 'nettoyant visage', 'masque visage',
+                    'anti-âge', 'hydratant visage'
+                ],
+                'max_pages': 15
+            },
+            'notino': {
+                'base_url': 'https://www.notino.fr',
+                'search_terms': [
+                    'crème visage', 'sérum visage', 'nettoyant visage', 'masque visage',
+                    'anti-âge', 'hydratant visage'
+                ],
+                'max_pages': 15
+            }
+        }
+        
+        self.scraped_products = []
+        self.images_downloaded = 0
+        self.products_saved = 0
+        self.lock = threading.Lock()
+        
+        # Créer le dossier media/products
+        self.media_dir = os.path.join(os.path.dirname(__file__), 'media', 'products')
+        os.makedirs(self.media_dir, exist_ok=True)
+    
+    def download_image_parallel(self, image_url, product_name, source):
+        """Télécharge et sauvegarde une image en parallèle"""
+        try:
+            if not image_url or image_url == '':
+                return None
+                
+            # Nettoyer le nom du produit
+            safe_name = "".join(c for c in product_name if c.isalnum() or c in (' ', '-', '_')).rstrip()
+            safe_name = safe_name.replace(' ', '_')[:50]
+            
+            # Nom du fichier avec source et timestamp
+            timestamp = int(time.time())
+            filename = f"{source}_{safe_name}_{timestamp}.jpg"
+            filepath = os.path.join(self.media_dir, filename)
+            
+            # Télécharger l'image
+            response = requests.get(image_url, headers=self.base_headers, timeout=10)
+            response.raise_for_status()
+            
+            # Sauvegarder l'image
+            with open(filepath, 'wb') as f:
+                f.write(response.content)
+            
+            with self.lock:
+                self.images_downloaded += 1
+            
+            return f"products/{filename}"
+            
+        except Exception as e:
+            print(f"Erreur téléchargement image {product_name}: {e}")
+            return None
+    
+    def extract_amazon_products(self, soup, page_url):
+        """Extrait les produits Amazon avec sélecteurs améliorés"""
+        products = []
+        
+        try:
+            # Sélecteurs Amazon multiples
+            product_elements = (
+                soup.find_all('div', {'data-component-type': 's-search-result'}) or
+                soup.find_all('div', {'class': 's-result-item'}) or
+                soup.find_all('div', {'class': 's-widget-container'})
+            )
+            
+            for element in product_elements:
+                try:
+                    # Titre avec sélecteurs multiples
+                    title_elem = (
+                        element.find('h2', {'class': 's-size-mini'}) or
+                        element.find('h2', {'class': 'a-size-mini'}) or
+                        element.find('span', {'class': 'a-size-medium'}) or
+                        element.find('span', {'class': 'a-size-base-plus'}) or
+                        element.find('h3', {'class': 'a-size-base'})
+                    )
+                    
+                    if not title_elem:
+                        continue
+                    
+                    title = title_elem.get_text(strip=True)
+                    if len(title) < 10:  # Filtrer les titres trop courts
+                        continue
+                    
+                    # Lien
+                    link_elem = element.find('a', {'class': 'a-link-normal'}) or element.find('a')
+                    product_url = urljoin(self.sources['amazon']['base_url'], link_elem.get('href', '')) if link_elem else ''
+                    
+                    # Prix avec sélecteurs multiples
+                    price_elem = (
+                        element.find('span', {'class': 'a-price-whole'}) or
+                        element.find('span', {'class': 'a-offscreen'}) or
+                        element.find('span', {'class': 'a-price'}) or
+                        element.find('span', {'class': 'a-price-range'})
+                    )
+                    price = 0.0
+                    if price_elem:
+                        price_text = price_elem.get_text(strip=True).replace('€', '').replace(',', '.')
+                        try:
+                            price = float(re.findall(r'\d+\.?\d*', price_text)[0])
+                        except:
+                            price = 0.0
+                    
+                    # Image avec sélecteurs multiples
+                    img_elem = (
+                        element.find('img', {'class': 's-image'}) or
+                        element.find('img', {'class': 'a-dynamic-image'}) or
+                        element.find('img')
+                    )
+                    image_url = ''
+                    if img_elem:
+                        image_url = img_elem.get('src', '') or img_elem.get('data-src', '') or img_elem.get('data-lazy', '')
+                    
+                    # Rating
+                    rating_elem = element.find('span', {'class': 'a-icon-alt'}) or element.find('span', {'class': 'a-icon'})
+                    rating = 0.0
+                    if rating_elem:
+                        rating_text = rating_elem.get_text(strip=True)
+                        try:
+                            rating = float(re.findall(r'\d+\.?\d*', rating_text)[0])
+                        except:
+                            rating = 0.0
+                    
+                    # Marque
+                    brand = self.extract_brand_from_title(title)
+                    
+                    # Catégorie
+                    category = self.determine_category(title)
+                    
+                    # Types de peau
+                    skin_types = self.determine_skin_types(title)
+                    
+                    # Problèmes ciblés
+                    target_issues = self.determine_target_issues(title)
+                    
+                    product_data = {
+                        'name': title,
+                        'brand': brand,
+                        'price': price,
+                        'image_url': image_url,
+                        'description': f"Produit Amazon - {title}",
+                        'category': category,
+                        'target_skin_types': skin_types,
+                        'target_issues': target_issues,
+                        'ingredients': "Ingrédients non spécifiés",
+                        'source': 'Amazon.fr',
+                        'rating': rating,
+                        'url': product_url
+                    }
+                    
+                    products.append(product_data)
+                    
+                except Exception as e:
+                    continue
+        
+        except Exception as e:
+            print(f"Erreur extraction Amazon: {e}")
+        
+        return products
+    
+    def extract_generic_products(self, soup, source_name, base_url):
+        """Extrait les produits d'une source générique"""
+        products = []
+        
+        try:
+            # Sélecteurs génériques pour la plupart des sites
+            product_elements = (
+                soup.find_all('div', {'class': 'product-tile'}) or
+                soup.find_all('div', {'class': 'product-item'}) or
+                soup.find_all('article', {'class': 'product'}) or
+                soup.find_all('div', {'class': 'product'}) or
+                soup.find_all('div', {'class': 'item'}) or
+                soup.find_all('div', {'class': 'card'})
+            )
+            
+            for element in product_elements:
+                try:
+                    # Titre
+                    title_elem = (
+                        element.find('h3') or element.find('h2') or 
+                        element.find('a', {'class': 'product-name'}) or
+                        element.find('span', {'class': 'product-name'}) or
+                        element.find('div', {'class': 'product-name'})
+                    )
+                    if not title_elem:
+                        continue
+                    
+                    title = title_elem.get_text(strip=True)
+                    if len(title) < 5:
+                        continue
+                    
+                    # Prix
+                    price_elem = (
+                        element.find('span', {'class': 'price'}) or
+                        element.find('div', {'class': 'price'}) or
+                        element.find('span', {'class': 'amount'}) or
+                        element.find('span', {'class': 'cost'}) or
+                        element.find('div', {'class': 'cost'})
+                    )
+                    price = 0.0
+                    if price_elem:
+                        price_text = price_elem.get_text(strip=True).replace('€', '').replace(',', '.')
+                        try:
+                            price = float(re.findall(r'\d+\.?\d*', price_text)[0])
+                        except:
+                            price = 0.0
+                    
+                    # Image
+                    img_elem = element.find('img')
+                    image_url = ''
+                    if img_elem:
+                        image_url = img_elem.get('src', '') or img_elem.get('data-src', '') or img_elem.get('data-lazy', '')
+                        if image_url and not image_url.startswith('http'):
+                            image_url = urljoin(base_url, image_url)
+                    
+                    # Marque
+                    brand_elem = (
+                        element.find('span', {'class': 'brand'}) or
+                        element.find('div', {'class': 'brand'}) or
+                        element.find('a', {'class': 'brand'}) or
+                        element.find('span', {'class': 'manufacturer'})
+                    )
+                    brand = brand_elem.get_text(strip=True) if brand_elem else self.extract_brand_from_title(title)
+                    
+                    product_data = {
+                        'name': title,
+                        'brand': brand,
+                        'price': price,
+                        'image_url': image_url,
+                        'description': f"Produit {source_name} - {title}",
+                        'category': self.determine_category(title),
+                        'target_skin_types': self.determine_skin_types(title),
+                        'target_issues': self.determine_target_issues(title),
+                        'ingredients': "Ingrédients non spécifiés",
+                        'source': f"{source_name}.fr"
+                    }
+                    
+                    products.append(product_data)
+                    
+                except Exception as e:
+                    continue
+        
+        except Exception as e:
+            print(f"Erreur extraction {source_name}: {e}")
+        
+        return products
+    
+    def extract_brand_from_title(self, title):
+        """Extrait la marque du titre avec une liste étendue"""
+        brands = [
+            "L'Oréal Paris", "Garnier", "NIVEA", "Vichy", "La Roche-Posay", 
+            "Avène", "Eucerin", "Bioderma", "CeraVe", "Cattier", "Topicrem",
+            "Mixa", "L'OCCITANE", "Weleda", "Neutrogena", "Hero Cosmetics",
+            "Dr. Althea", "Hada Labo", "DERMA E", "Scholl", "Felce Azzurra",
+            "Demak'Up", "LABELLO", "Nip+Fab", "Braun", "Lavera", "Catrice",
+            "AiQInu", "NOVA ENGEL", "Clinique", "KLEEM ORGANICS", "Brickell",
+            "Tiege Hanley", "Dr. Organic", "Revlon", "I Heart Revolution",
+            "Lancôme", "Dior", "Estée Lauder", "Chanel", "Shiseido", "Fresh",
+            "Kiehl's", "The Body Shop", "Lush", "Olay", "Maybelline", "L'Oréal",
+            "Paula's Choice", "The Ordinary", "Drunk Elephant", "Fenty Skin",
+            "Glow Recipe", "The Inkey List", "Uriage", "Vichy", "L'Oréal Paris",
+            "Clinique", "MAC", "Urban Decay", "Too Faced", "Benefit", "NARS",
+            "Bobbi Brown", "Smashbox", "Tarte", "Anastasia Beverly Hills",
+            "Huda Beauty", "Fenty Beauty", "Rare Beauty", "Glossier", "Milk Makeup"
+        ]
+        
+        for brand in brands:
+            if brand.lower() in title.lower():
+                return brand
+        
+        return title.split()[0] if title.split() else "Marque inconnue"
+    
+    def determine_category(self, title):
+        """Détermine la catégorie du produit avec plus de mots-clés"""
+        title_lower = title.lower()
+        
+        if any(word in title_lower for word in ['crème', 'cream', 'moisturizer', 'hydratant', 'lotion']):
+            return 'MOISTURIZER'
+        elif any(word in title_lower for word in ['sérum', 'serum', 'concentrate', 'essence']):
+            return 'SERUM'
+        elif any(word in title_lower for word in ['nettoyant', 'cleanser', 'gel', 'micellaire', 'solution', 'wash']):
+            return 'CLEANSER'
+        elif any(word in title_lower for word in ['masque', 'mask', 'treatment']):
+            return 'MASK'
+        elif any(word in title_lower for word in ['tonique', 'toner', 'mist']):
+            return 'TONER'
+        elif any(word in title_lower for word in ['exfoliant', 'scrub', 'gommage', 'peeling']):
+            return 'EXFOLIANT'
+        elif any(word in title_lower for word in ['solaire', 'sunscreen', 'spf', 'sun']):
+            return 'SUNSCREEN'
+        elif any(word in title_lower for word in ['patch', 'bouton', 'spot', 'treatment']):
+            return 'TREATMENT'
+        else:
+            return 'MOISTURIZER'
+    
+    def determine_skin_types(self, title):
+        """Détermine les types de peau ciblés avec plus de mots-clés"""
+        title_lower = title.lower()
+        skin_types = []
+        
+        if any(word in title_lower for word in ['sèche', 'dry', 'hydratant', 'hydratation', 'nourrissant']):
+            skin_types.append('DRY')
+        if any(word in title_lower for word in ['grasse', 'oily', 'séborrhée', 'mixtes', 'matifiant']):
+            skin_types.append('OILY')
+        if any(word in title_lower for word in ['mixte', 'combination', 'mixtes']):
+            skin_types.append('COMBINATION')
+        if any(word in title_lower for word in ['sensible', 'sensitive', 'délicat', 'apaisant']):
+            skin_types.append('SENSITIVE')
+        if any(word in title_lower for word in ['normale', 'normal', 'tous types', 'universel']):
+            skin_types.append('NORMAL')
+        
+        if not skin_types:
+            skin_types = ['DRY', 'OILY', 'COMBINATION', 'NORMAL', 'SENSITIVE']
+        
+        return skin_types
+    
+    def determine_target_issues(self, title):
+        """Détermine les problèmes ciblés avec plus de mots-clés"""
+        title_lower = title.lower()
+        issues = []
+        
+        if any(word in title_lower for word in ['anti-âge', 'anti-age', 'rides', 'wrinkles', 'jeunesse', 'firming']):
+            issues.append('aging')
+        if any(word in title_lower for word in ['acné', 'acne', 'boutons', 'imperfections', 'patch', 'spots']):
+            issues.append('acne')
+        if any(word in title_lower for word in ['taches', 'spots', 'pigmentation', 'éclat', 'brightening']):
+            issues.append('dark_spots')
+        if any(word in title_lower for word in ['rougeurs', 'redness', 'irritation', 'calming']):
+            issues.append('redness')
+        if any(word in title_lower for word in ['hydratation', 'moisturizing', 'sècheresse', 'hydration']):
+            issues.append('dryness')
+        if any(word in title_lower for word in ['éclat', 'brightening', 'luminosité', 'glow']):
+            issues.append('dullness')
+        if any(word in title_lower for word in ['pores', 'points noirs', 'blackheads', 'refining']):
+            issues.append('large_pores')
+        
+        if not issues:
+            issues = ['dryness']
+        
+        return issues
+    
+    def scrape_page_parallel(self, url, source_name):
+        """Scrape une page en parallèle"""
+        try:
+            response = requests.get(url, headers=self.base_headers, timeout=15)
+            response.raise_for_status()
+            
+            soup = BeautifulSoup(response.content, 'html.parser')
+            
+            if source_name == 'amazon':
+                return self.extract_amazon_products(soup, url)
+            else:
+                return self.extract_generic_products(soup, source_name, self.sources[source_name]['base_url'])
+                
+        except Exception as e:
+            print(f"Erreur scraping {source_name} {url}: {e}")
+            return []
+    
+    def generate_search_urls(self, source_name, source_config):
+        """Génère toutes les URLs de recherche pour une source"""
+        urls = []
+        base_url = source_config['base_url']
+        
+        for term in source_config['search_terms']:
+            for page in range(1, source_config['max_pages'] + 1):
+                if source_name == 'amazon':
+                    url = f"{base_url}/s?k={term.replace(' ', '+')}&page={page}"
+                else:
+                    url = f"{base_url}/recherche?q={term.replace(' ', '+')}&page={page}"
+                urls.append((url, source_name))
+        
+        return urls
+    
+    def save_products_batch(self, products):
+        """Sauvegarde un lot de produits"""
+        saved_count = 0
+        skipped_count = 0
+        
+        for product_data in products:
+            try:
+                # Vérifier si le produit existe déjà
+                existing_product = Product.objects.filter(
+                    name=product_data['name'],
+                    brand=product_data['brand']
+                ).first()
+                
+                if existing_product:
+                    skipped_count += 1
+                    continue
+                
+                # Télécharger l'image en parallèle
+                image_path = None
+                if product_data.get('image_url'):
+                    image_path = self.download_image_parallel(
+                        product_data['image_url'], 
+                        product_data['name'], 
+                        product_data.get('source', 'unknown')
+                    )
+                
+                # Créer le produit
+                product = Product.objects.create(
+                    name=product_data['name'],
+                    brand=product_data['brand'],
+                    price=product_data['price'],
+                    image=image_path,
+                    description=product_data['description'],
+                    ingredients=product_data['ingredients'],
+                    category=product_data['category'],
+                    target_skin_types=product_data['target_skin_types'],
+                    target_issues=product_data['target_issues']
+                )
+                
+                saved_count += 1
+                self.products_saved += 1
+                
+            except Exception as e:
+                print(f"Erreur sauvegarde produit {product_data['name']}: {e}")
+                continue
+        
+        return saved_count, skipped_count
+    
+    def run_parallel_big_data_scraping(self):
+        """Lance le scraping Big Data parallélisé"""
+        print("=== DÉMARRAGE DU SCRAPING BIG DATA PARALLÉLISÉ ===")
+        print(f"Workers parallèles: {self.max_workers}")
+        print(f"Sources: {list(self.sources.keys())}")
+        
+        # Calculer le nombre total d'URLs
+        total_urls = sum(len(s['search_terms']) * s['max_pages'] for s in self.sources.values())
+        print(f"Total URLs à scraper: {total_urls}")
+        print("=" * 60)
+        
+        start_time = datetime.now()
+        
+        # Générer toutes les URLs
+        all_urls = []
+        for source_name, source_config in self.sources.items():
+            urls = self.generate_search_urls(source_name, source_config)
+            all_urls.extend(urls)
+        
+        print(f"URLs générées: {len(all_urls)}")
+        
+        # Scraper en parallèle
+        all_products = []
+        
+        with concurrent.futures.ThreadPoolExecutor(max_workers=self.max_workers) as executor:
+            # Soumettre toutes les tâches
+            future_to_url = {
+                executor.submit(self.scrape_page_parallel, url, source): (url, source) 
+                for url, source in all_urls
+            }
+            
+            # Traiter les résultats au fur et à mesure
+            batch_size = 50
+            current_batch = []
+            
+            for future in concurrent.futures.as_completed(future_to_url):
+                url, source = future_to_url[future]
+                try:
+                    products = future.result()
+                    if products:
+                        current_batch.extend(products)
+                        all_products.extend(products)
+                        
+                        # Sauvegarder par lots
+                        if len(current_batch) >= batch_size:
+                            saved, skipped = self.save_products_batch(current_batch)
+                            print(f"Lot sauvegardé: {saved} ajoutés, {skipped} ignorés")
+                            current_batch = []
+                            
+                except Exception as e:
+                    print(f"Erreur traitement {url}: {e}")
+                    continue
+        
+        # Sauvegarder le dernier lot
+        if current_batch:
+            saved, skipped = self.save_products_batch(current_batch)
+            print(f"Dernier lot: {saved} ajoutés, {skipped} ignorés")
+        
+        end_time = datetime.now()
+        duration = end_time - start_time
+        
+        print("\n" + "=" * 60)
+        print("=== RÉSULTATS DU SCRAPING BIG DATA PARALLÉLISÉ ===")
+        print(f"Durée totale: {duration}")
+        print(f"URLs traitées: {len(all_urls)}")
+        print(f"Produits collectés: {len(all_products)}")
+        print(f"Produits sauvegardés: {self.products_saved}")
+        print(f"Images téléchargées: {self.images_downloaded}")
+        print(f"Total produits en base: {Product.objects.count()}")
+        print("=" * 60)
+        
+        return all_products
+
+def main():
+    """Fonction principale"""
+    scraper = ParallelBigDataScraper(max_workers=15)  # 15 workers en parallèle
+    scraper.run_parallel_big_data_scraping()
+
+if __name__ == "__main__":
+    main()
+
+
