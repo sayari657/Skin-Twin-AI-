@@ -53,13 +53,22 @@ npm start
 
 ## 🔧 Configuration
 
-### Variables d'environnement Backend
+### Configuration Groq API (Backend)
 
-Créez un fichier `.env` dans `backend/` :
+**Option 1 : Fichier local (recommandé pour développement)**
+Créez le fichier `backend/config_local.py` (ignoré par Git) :
+```python
+GROQ_API_KEY_LOCAL = 'votre_cle_groq_ici'
+GROQ_MODEL_LOCAL = 'llama-3.1-8b-instant'
 ```
-GROQ_API_KEY=votre_cle_groq
-GROQ_MODEL=llama-3.1-8b-instant
+
+**Option 2 : Variables d'environnement**
+```bash
+export GROQ_API_KEY=votre_cle_groq
+export GROQ_MODEL=llama-3.1-8b-instant
 ```
+
+**Note :** Le fichier `config_local.py` est ignoré par Git pour la sécurité. Utilisez `config_local.example.py` comme modèle.
 
 ### Variables d'environnement Frontend
 

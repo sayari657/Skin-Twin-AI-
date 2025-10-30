@@ -1,18 +1,23 @@
 """
 Script de test pour vérifier que Groq API fonctionne correctement
-IMPORTANT: Configurez votre clé dans les variables d'environnement
-Exemple: set GROQ_API_KEY=votre_cle_ici
+Utilise config_local.py pour la clé API (ignoré par Git)
 """
 import os
 import requests
 
-GROQ_API_KEY = os.environ.get('GROQ_API_KEY')
-if not GROQ_API_KEY:
-    print("ERREUR: GROQ_API_KEY non configurée!")
-    print("Configurez-la avec: set GROQ_API_KEY=votre_cle_ici")
-    exit(1)
+# Essaie d'abord le fichier local, puis les variables d'environnement
+try:
+    from config_local import GROQ_API_KEY_LOCAL, GROQ_MODEL_LOCAL
+    GROQ_API_KEY = os.environ.get('GROQ_API_KEY') or GROQ_API_KEY_LOCAL
+    GROQ_MODEL = os.environ.get('GROQ_MODEL') or GROQ_MODEL_LOCAL
+except ImportError:
+    GROQ_API_KEY = os.environ.get('GROQ_API_KEY')
+    GROQ_MODEL = os.environ.get('GROQ_MODEL', 'llama-3.1-8b-instant')
+    if not GROQ_API_KEY:
+        print("ERREUR: GROQ_API_KEY non configurée!")
+        print("Créez le fichier backend/config_local.py avec votre clé")
+        exit(1)
 
-GROQ_MODEL = 'llama-3.1-8b-instant'
 GROQ_URL = 'https://api.groq.com/openai/v1/chat/completions'
 
 def test_groq():

@@ -128,9 +128,16 @@ Par exemple :
 Quelle question spécifique vous intéresse ? Dites-moi ce que vous voulez savoir et je vous donnerai des conseils détaillés !"""
 
 # GROQ configuration via environment variables
-# Fallback vers une clé par défaut pour le développement
-GROQ_API_KEY = os.environ.get('GROQ_API_KEY')  # Ne pas mettre de clé par défaut ici pour la sécurité
-GROQ_MODEL = os.environ.get('GROQ_MODEL', 'llama-3.1-8b-instant')  # Modèle mis à jour (llama3-8b-8192 décommissionné)
+# Essaie d'abord les variables d'environnement, puis le fichier local, puis None
+try:
+    from ..config_local import GROQ_API_KEY_LOCAL, GROQ_MODEL_LOCAL
+    GROQ_API_KEY = os.environ.get('GROQ_API_KEY') or GROQ_API_KEY_LOCAL
+    GROQ_MODEL = os.environ.get('GROQ_MODEL') or GROQ_MODEL_LOCAL
+except ImportError:
+    # Fichier config_local.py n'existe pas ou n'a pas les variables
+    GROQ_API_KEY = os.environ.get('GROQ_API_KEY')
+    GROQ_MODEL = os.environ.get('GROQ_MODEL', 'llama-3.1-8b-instant')
+
 GROQ_URL = 'https://api.groq.com/openai/v1/chat/completions'
 
 @api_view(['POST'])

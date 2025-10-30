@@ -3,12 +3,10 @@ echo ========================================
 echo CONFIGURATION GROQ API KEY
 echo ========================================
 echo.
-echo Configuration de la clé Groq API...
-echo ATTENTION: Configurez votre clé dans les variables d'environnement
-echo Exemple: set GROQ_API_KEY=votre_cle_ici
+echo La clé Groq est configurée dans backend/config_local.py
+echo (ce fichier est ignoré par Git pour la sécurité)
 echo.
 set GROQ_MODEL=llama-3.1-8b-instant
-echo.
 echo Modèle : %GROQ_MODEL%
 echo.
 echo ========================================
