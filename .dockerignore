@@ -1,0 +1,129 @@
+# Python
+__pycache__/
+**/__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+**/venv/
+env/
+ENV/
+.venv
+**/.venv/
+
+# Django
+*.log
+**/*.log
+db.sqlite3
+**/db.sqlite3
+db.sqlite3-journal
+**/db.sqlite3-journal
+/media
+**/media/
+/staticfiles
+**/staticfiles/
+*.pot
+*.pyc
+**/*.pyc
+
+# Node
+node_modules/
+**/node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+package-lock.json
+
+# Frontend build
+frontend/build/
+frontend/.cache/
+frontend/dist/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Git
+.git/
+.gitignore
+.gitattributes
+
+# Environment
+.env
+.env.local
+.env.*.local
+**/.env
+**/.env.local
+
+# Docker
+docker-compose.override.yml
+*.tar
+*.tar.gz
+Dockerfile*
+docker-compose*.yml
+
+# Build
+build/
+dist/
+*.egg-info/
+**/*.egg-info/
+
+# Logs
+logs/
+**/logs/
+*.log
+**/*.log
+
+# Temporary files
+*.tmp
+*.temp
+.cache/
+**/.cache/
+*.bak
+*.swp
+
+# Documentation générée
+docs/_build/
+# Ne pas exclure les fichiers .md (ils peuvent être utiles)
+
+# Tests
+.coverage
+.pytest_cache/
+htmlcov/
+**/.pytest_cache/
+**/htmlcov/
+
+# ML Models (exclure les gros fichiers)
+ml_models/**/*.pt
+ml_models/**/*.pth
+ml_models/**/*.joblib
+ml_models/**/*.h5
+ml_models/**/*.pb
+
+# Backend spécifique
+backend/media/
+backend/staticfiles/
+backend/logs/
+backend/venv/
+backend/db.sqlite3
+
+# Frontend spécifique
+frontend/node_modules/
+frontend/build/
+frontend/.cache/
+
+# Scripts et fichiers de démarrage (non nécessaires dans l'image)
+*.bat
+*.ps1
+# Garder les scripts shell Docker
+!docker/*.sh

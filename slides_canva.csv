@@ -1,0 +1,184 @@
+Slide,Type,Titre,Sous-titre,Contenu
+1,title,Skin-Twin-AI,Intelligence Artificielle pour l'Analyse de la Peau,"• Application intelligente d'analyse dermatologique
+• Recommandations personnalisées de soins
+• Powered by AI & Machine Learning"
+2,content,Introduction,,"• Skin-Twin-AI révolutionne les soins de la peau grâce à l'intelligence artificielle
+• Analyse précise de votre peau en quelques secondes
+• Recommandations personnalisées basées sur votre profil unique
+• Assistant IA conversationnel disponible 24/7"
+3,problem,La Problématique,,"• Difficulté à identifier son type de peau précisément
+• Manque d'accès à des conseils dermatologiques professionnels
+• Surcharge d'informations contradictoires sur internet
+• Produits cosmétiques mal adaptés = résultats décevants
+• Coût élevé des consultations dermatologiques"
+4,solution,Notre Solution,,"• Analyse instantanée de la peau via photo
+• Détection automatique des problèmes cutanés
+• Recommandations de produits personnalisées
+• Assistant IA pour conseils en temps réel
+• Suivi de l'évolution de votre peau"
+5,overview,Vue d'Ensemble de l'Application,,"• Frontend React + TypeScript
+• Backend Django REST Framework
+• 5 Modèles de Machine Learning intégrés
+• API IA conversationnelle (Groq/Gemini)
+• Système de recommandation intelligent
+• Dashboard avec statistiques"
+6,features,Fonctionnalités Principales,,"• 🤖 Assistant IA conversationnel avec Groq API
+• 🎤 Reconnaissance vocale pour interagir avec le chat
+• 📸 Analyse de peau via upload d'images
+• 📊 Dashboard avec statistiques et graphiques
+• 💬 Système de témoignages utilisateurs
+• 🔐 Authentification JWT sécurisée"
+7,feature_detail,Analyse de Peau Avancée,,"• Classification du type de peau (Sèche, Normale, Grasse)
+• Détection de l'acné avec niveau de sévérité
+• Identification des rides et signes de vieillissement
+• Détection des taches sombres et hyperpigmentation
+• Analyse des rougeurs et irritations
+• Image annotée avec zones détectées"
+8,ml_models,Modèles de Machine Learning,,"• CNN (Convolutional Neural Network) pour classification du type de peau
+• YOLOv8 pour détection d'objets (acné, rides, taches)
+• Modèles de segmentation pour zones précises
+• 5 modèles intégrés fonctionnant en parallèle
+• Précision élevée grâce à l'entraînement sur grandes bases de données"
+9,architecture,Architecture Frontend,,"• React 18+ avec TypeScript
+• Material-UI (MUI) pour l'interface moderne
+• React Router pour la navigation
+• Axios pour les appels API
+• Web Speech API pour la reconnaissance vocale
+• Design responsive et mobile-first"
+10,architecture,Architecture Backend,,"• Django 5.2.6 + Django REST Framework
+• SQLite pour le développement
+• MySQL pour la production
+• JWT Authentication pour la sécurité
+• Architecture modulaire (chat_ai, detection, users, products)
+• API RESTful complète"
+11,ai_chat,Assistant IA Conversationnel,,"• Intégration avec Groq API (Llama 3.1)
+• Support pour Gemini AI et Ollama
+• Contexte utilisateur intégré (âge, type de peau, historique)
+• Recommandations de routines personnalisées
+• Explications détaillées des ingrédients
+• Réponses en français naturel et professionnel"
+12,recommendation,Système de Recommandation Intelligent,,"• Algorithme de scoring multi-critères
+• Matching basé sur le type de peau détecté
+• Adaptation aux problèmes cutanés identifiés
+• Diversification des sources de produits
+• Score de confiance pour chaque recommandation
+• Base de données de produits scrapés automatiquement"
+13,tech_stack,Technologies Machine Learning,,"• PyTorch 2.0+ pour les modèles CNN
+• Ultralytics YOLOv8 pour la détection
+• OpenCV pour le traitement d'images
+• scikit-learn pour le preprocessing
+• XGBoost pour les modèles de scoring
+• TensorFlow pour les modèles GAN"
+14,mlops,MLOps et Infrastructure,,"• MLflow pour le Model Registry
+• Monitoring en production
+• Pipelines de training automatisés
+• Détection de dérive des données
+• Versioning des données avec DVC
+• CI/CD avec GitHub Actions"
+15,security,Sécurité et Authentification,,"• JWT (JSON Web Tokens) pour l'authentification
+• Chiffrement des données sensibles
+• Validation des uploads d'images
+• Protection CSRF intégrée
+• Gestion sécurisée des clés API
+• Conformité RGPD"
+16,dashboard,Dashboard Utilisateur,,"• Historique complet des analyses
+• Graphiques d'évolution de la peau
+• Statistiques de suivi
+• Comparaison avant/après
+• Métriques de confiance des prédictions
+• Visualisation des recommandations"
+17,use_case,Cas d'Usage: Traitement de l'Acné,,"• Détection automatique de l'acné et sévérité
+• Recommandation de produits avec acide salicylique
+• Routine personnalisée matin/soir
+• Suivi de l'évolution sur plusieurs semaines
+• Conseils adaptés selon le type de peau
+• Prévention des cicatrices"
+18,use_case,Cas d'Usage: Soins Anti-âge,,"• Détection des rides et signes de vieillissement
+• Recommandation de produits avec rétinol
+• Routine avec vitamine C le matin
+• Protection solaire quotidienne
+• Suivi de l'amélioration de la texture
+• Conseils adaptés à l'âge"
+19,use_case,Cas d'Usage: Taches Pigmentaires,,"• Détection de l'hyperpigmentation
+• Recommandation de produits éclaircissants
+• Routine avec acide azélaïque et niacinamide
+• Importance de la protection solaire
+• Suivi de la réduction des taches
+• Prévention de nouvelles taches"
+20,ui,Interface Utilisateur Moderne,,"• Design épuré et intuitif
+• Thème médical professionnel
+• Navigation fluide entre les sections
+• Upload d'images par glisser-déposer
+• Chat en temps réel avec l'IA
+• Visualisations interactives"
+21,products,Base de Données de Produits,,"• Scraping automatique de sites e-commerce
+• Plus de 1000 produits référencés
+• Informations détaillées (ingrédients, prix, taille)
+• Catégorisation intelligente
+• Mise à jour régulière automatique
+• Filtrage par type de peau et problèmes"
+22,performance,Performance et Scalabilité,,"• Temps d'analyse < 5 secondes
+• Optimisation des modèles ML
+• Cache des résultats fréquents
+• Architecture modulaire et extensible
+• Support Docker pour déploiement
+• Prêt pour la production"
+23,deployment,Déploiement avec Docker,,"• Docker Compose pour orchestration
+• Conteneurs séparés frontend/backend
+• Configuration d'environnement simplifiée
+• Scripts de démarrage automatique
+• Documentation complète
+• Export et partage facilités"
+24,api,API REST Endpoints,,"• /api/auth/ - Authentification
+• /api/detection/analyze/ - Analyse de peau
+• /api/chat/ - Assistant IA
+• /api/recommendations/ - Recommandations
+• /api/products/ - Gestion produits
+• /api/users/ - Profil utilisateur"
+25,testing,Tests et Assurance Qualité,,"• Tests unitaires avec pytest
+• Tests d'intégration Django
+• Validation des modèles ML
+• Tests de performance
+• Validation des données utilisateur
+• Monitoring des erreurs en production"
+26,stats,Statistiques et Métriques,,"• Suivi du nombre d'analyses effectuées
+• Taux de précision des prédictions
+• Temps moyen de traitement
+• Satisfaction utilisateur
+• Taux de conversion des recommandations
+• Performance des modèles ML"
+27,roadmap,Roadmap Future,,"• Application mobile iOS/Android
+• Intégration de plus de modèles ML
+• Reconnaissance faciale avancée
+• Partage social des résultats
+• Programme de fidélité
+• Partenariats avec marques cosmétiques"
+28,competitive,Avantages Concurrentiels,,"• 5 modèles ML intégrés (vs 1-2 pour concurrents)
+• Assistant IA conversationnel avancé
+• Recommandations ultra-personnalisées
+• Interface moderne et intuitive
+• Gratuit et accessible à tous
+• Open source et extensible"
+29,impact,Impact et Bénéfices,,"• Démocratisation des soins dermatologiques
+• Économies pour les utilisateurs
+• Meilleure compréhension de sa peau
+• Choix de produits plus éclairés
+• Prévention des problèmes cutanés
+• Amélioration de la confiance en soi"
+30,conclusion,Conclusion,,"• Skin-Twin-AI combine IA et dermatologie
+• Solution complète et accessible
+• Technologie de pointe au service de tous
+• Évolution continue grâce au feedback utilisateurs
+• Rejoignez la révolution des soins de la peau intelligents"
+31,thanks,Remerciements,,"• Groq pour l'API IA
+• Material-UI pour les composants
+• Django et React communities
+• Ultralytics pour YOLOv8
+• Tous les contributeurs open source
+• Merci de votre attention !"
+32,contact,Contact et Ressources,,"• GitHub: github.com/skin-twin-ai
+• Documentation complète disponible
+• Guide de démarrage rapide
+• Support technique disponible
+• Développé par Mohamed Sayari
+• Licence MIT"

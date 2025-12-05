@@ -24,6 +24,8 @@ export interface ChatRequest {
   message: string;
   session_id?: string;
   include_context?: boolean;
+  system?: string;
+  analysis_context?: string;
 }
 
 export interface ChatResponse {
@@ -46,9 +48,23 @@ class ChatService {
 
   async chatWithAI(request: ChatRequest): Promise<ChatResponse> {
     try {
+      const payload: any = {
+        message: request.message,
+        session_id: request.session_id,
+        include_context: request.include_context,
+      };
+      
+      // Ajouter le contexte système et d'analyse si fournis
+      if (request.system) {
+        payload.system = request.system;
+      }
+      if (request.analysis_context) {
+        payload.analysis_context = request.analysis_context;
+      }
+      
       const response = await axios.post(
         `${this.baseURL}/chat/`,
-        request,
+        payload,
         { headers: this.getAuthHeaders() }
       );
       return response.data;

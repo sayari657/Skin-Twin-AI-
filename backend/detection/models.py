@@ -7,6 +7,7 @@ class SkinAnalysis(models.Model):
     
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='skin_analyses')
     image = models.ImageField(upload_to='uploads/skin_analyses/')
+    annotated_image = models.ImageField(upload_to='uploads/skin_analyses/annotated/', null=True, blank=True)
     
     # Résultats de l'analyse CNN
     skin_type_prediction = models.CharField(max_length=20, null=True, blank=True)

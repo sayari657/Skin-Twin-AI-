@@ -1,0 +1,71 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Django
+*.log
+local_settings.py
+db.sqlite3-journal
+media/
+staticfiles/
+venv/
+env/
+.venv/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+logs/
+*.log
+
+# Config local (ne pas inclure les clés API)
+config_local.py
+.env
+.env.local
+
+# Fichiers temporaires
+*.tmp
+*.bak
+*.cache
+
+# Scripts de démarrage Windows
+*.bat
+
+# Fichiers de test
+test_*.py
+*_test.py
+
+# Base de données de développement (sera créée dans le conteneur)
+db.sqlite3
+
+# Migrations (garder les migrations dans l'image)
+# migrations/
+

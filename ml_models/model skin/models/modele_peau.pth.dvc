@@ -1,0 +1,5 @@
+outs:
+- md5: 0d641fd6e98f24d7a08c40ae83036321
+  size: 16347226
+  hash: md5
+  path: modele_peau.pth

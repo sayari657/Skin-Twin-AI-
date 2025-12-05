@@ -73,10 +73,16 @@ TEMPLATES = [
 WSGI_APPLICATION = 'skin_ai.wsgi.application'
 
 # Database
+# Utiliser /app/data/db.sqlite3 dans Docker, sinon BASE_DIR/db.sqlite3
+if os.path.exists('/app/data'):
+    DATABASE_PATH = Path('/app/data/db.sqlite3')
+else:
+    DATABASE_PATH = BASE_DIR / 'db.sqlite3'
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': DATABASE_PATH,
     }
 }
 
@@ -156,6 +162,35 @@ CORS_ALLOWED_ORIGINS = [
 ]
 
 CORS_ALLOW_CREDENTIALS = True
+
+# CORS headers for media files
+CORS_ALLOW_HEADERS = [
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
+]
+
+# Allow all methods for CORS (needed for media files)
+CORS_ALLOW_METHODS = [
+    'DELETE',
+    'GET',
+    'OPTIONS',
+    'PATCH',
+    'POST',
+    'PUT',
+]
+
+# Expose headers for CORS
+CORS_EXPOSE_HEADERS = [
+    'content-type',
+    'content-length',
+]
 
 # File upload settings
 FILE_UPLOAD_MAX_MEMORY_SIZE = 10 * 1024 * 1024  # 10MB

@@ -14,7 +14,7 @@ urlpatterns = [
     # Actions de scraping
     path('start-session/', views.start_scraping_session, name='start-scraping-session'),
     path('save-products/', views.save_scraped_products, name='save-scraped-products'),
-    
+    path('scrape-web/', views.scrape_web_products, name='scrape-web-products'),
     
     # Statistiques
     path('stats/', views.scraping_stats, name='scraping-stats'),

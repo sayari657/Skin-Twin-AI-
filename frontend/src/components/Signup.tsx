@@ -20,6 +20,9 @@ import {
   FormControlLabel,
   Checkbox,
   Chip,
+  Slider,
+  RadioGroup,
+  Radio,
 } from '@mui/material';
 import {
   InputAdornment,
@@ -63,9 +66,12 @@ const Signup: React.FC = () => {
     sunscreen_usage: undefined,
     diet: undefined,
     hydration: undefined,
-    smoking: false,
-    alcohol: false,
+    smoking: undefined,
+    alcohol: undefined,
     sleep_hours: undefined,
+    stress_level: undefined,
+    diet_quality: undefined,
+    alcohol_consumption: undefined,
     family_dermatological_history: false,
     current_treatments: '',
     current_cosmetics: '',
@@ -180,8 +186,8 @@ const Signup: React.FC = () => {
     cleaned.blood_disorders = Boolean(data.blood_disorders);
     cleaned.autoimmune_diseases = Boolean(data.autoimmune_diseases);
     cleaned.pregnancy = Boolean(data.pregnancy);
-    cleaned.smoking = Boolean(data.smoking);
-    cleaned.alcohol = Boolean(data.alcohol);
+    if (data.smoking !== undefined && data.smoking !== null) cleaned.smoking = Boolean(data.smoking);
+    if (data.alcohol !== undefined && data.alcohol !== null) cleaned.alcohol = Boolean(data.alcohol);
     cleaned.family_dermatological_history = Boolean(data.family_dermatological_history);
     
     // Champs de style de vie - seulement si définis
@@ -190,6 +196,9 @@ const Signup: React.FC = () => {
     if (data.diet !== undefined && data.diet !== null) cleaned.diet = data.diet;
     if (data.hydration !== undefined && data.hydration !== null) cleaned.hydration = data.hydration;
     if (data.sleep_hours !== undefined && data.sleep_hours !== null) cleaned.sleep_hours = data.sleep_hours;
+    if (data.stress_level !== undefined && data.stress_level !== null) cleaned.stress_level = data.stress_level;
+    if (data.diet_quality !== undefined && data.diet_quality !== null) cleaned.diet_quality = data.diet_quality;
+    if (data.alcohol_consumption !== undefined && data.alcohol_consumption !== null) cleaned.alcohol_consumption = data.alcohol_consumption;
     
     // Champs de texte - seulement si non vides
     if (data.current_treatments && data.current_treatments.trim()) cleaned.current_treatments = data.current_treatments;
@@ -424,6 +433,7 @@ const Signup: React.FC = () => {
                 <MenuItem value="COMBINATION">Mixte</MenuItem>
                 <MenuItem value="NORMAL">Normale</MenuItem>
                 <MenuItem value="SENSITIVE">Sensible</MenuItem>
+                <MenuItem value="UNKNOWN">Je ne sais pas</MenuItem>
               </Select>
             </FormControl>
           </Box>
@@ -458,26 +468,34 @@ const Signup: React.FC = () => {
                 </Select>
               </FormControl>
             </Box>
-            <FormControlLabel
-              control={
-                <Checkbox
-                  name="smoking"
-                  checked={formData.smoking}
-                  onChange={handleChange}
-                />
-              }
-              label="Fumeur"
-            />
-            <FormControlLabel
-              control={
-                <Checkbox
-                  name="alcohol"
-                  checked={formData.alcohol}
-                  onChange={handleChange}
-                />
-              }
-              label="Consommation d'alcool"
-            />
+            
+            <FormControl fullWidth>
+              <InputLabel>Fumeur</InputLabel>
+              <Select
+                name="smoking"
+                value={formData.smoking === undefined ? '' : formData.smoking ? 'yes' : 'no'}
+                onChange={(e) => handleSelectChange('smoking', e.target.value === 'yes')}
+              >
+                <MenuItem value="yes">Oui</MenuItem>
+                <MenuItem value="no">Non</MenuItem>
+              </Select>
+            </FormControl>
+            
+            <Box>
+              <Typography gutterBottom sx={{ mb: 2 }}>
+                Niveau de stress (1-10)
+              </Typography>
+              <Slider
+                value={formData.stress_level || 5}
+                onChange={(e, value) => handleSelectChange('stress_level', value)}
+                min={1}
+                max={10}
+                step={1}
+                marks
+                valueLabelDisplay="auto"
+                sx={{ mt: 2 }}
+              />
+            </Box>
           </Box>
         );
 

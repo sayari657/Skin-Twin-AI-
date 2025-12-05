@@ -4,10 +4,19 @@ Services pour la simulation GAN
 import os
 import cv2
 import numpy as np
-import torch
 from PIL import Image
 from django.conf import settings
 import logging
+
+# Import optionnel de torch pour permettre le démarrage sans dépendances ML
+try:
+    import torch
+    TORCH_AVAILABLE = True
+except ImportError:
+    TORCH_AVAILABLE = False
+    torch = None
+    logger = logging.getLogger(__name__)
+    logger.warning("PyTorch non disponible. Les fonctionnalités GAN seront désactivées.")
 
 logger = logging.getLogger(__name__)
 
@@ -17,11 +26,18 @@ class GANSimulationService:
     
     def __init__(self):
         self.models_path = settings.ML_MODELS_PATH
-        self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+        if TORCH_AVAILABLE:
+            self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+        else:
+            self.device = None
         self.gan_model = None
     
     def load_gan_model(self, model_type='pix2pix'):
         """Charger le modèle GAN"""
+        if not TORCH_AVAILABLE:
+            logger.warning("PyTorch non disponible. Les modèles GAN ne peuvent pas être chargés.")
+            return
+        
         try:
             if model_type == 'pix2pix':
                 model_path = os.path.join(self.models_path, 'gan', 'pix2pix_skin.pt')
@@ -56,10 +72,13 @@ class GANSimulationService:
             image = image.astype(np.float32) / 255.0
             image = (image - 0.5) * 2.0
             
-            # Convertir en tensor
-            image_tensor = torch.from_numpy(image.transpose(2, 0, 1)).unsqueeze(0)
-            
-            return image_tensor
+            # Convertir en tensor si torch est disponible
+            if TORCH_AVAILABLE:
+                image_tensor = torch.from_numpy(image.transpose(2, 0, 1)).unsqueeze(0)
+                return image_tensor
+            else:
+                # Retourner l'image numpy si torch n'est pas disponible
+                return image
             
         except Exception as e:
             logger.error(f"Erreur lors du préprocessing GAN: {e}")
@@ -86,6 +105,10 @@ class GANSimulationService:
     
     def simulate_skin_improvement(self, image_path, simulation_type, analysis_results):
         """Simuler l'amélioration de la peau"""
+        if not TORCH_AVAILABLE or self.gan_model is None:
+            # Mode simulation simple (sans GAN réel)
+            return self._simple_simulation(image_path, simulation_type, analysis_results)
+        
         try:
             # Charger le modèle si nécessaire
             if self.gan_model is None:
@@ -96,8 +119,12 @@ class GANSimulationService:
                 return self._simple_simulation(image_path, simulation_type, analysis_results)
             
             # Préprocesser l'image
-            input_tensor = self.preprocess_for_gan(image_path)
-            input_tensor = input_tensor.to(self.device)
+            preprocessed = self.preprocess_for_gan(image_path)
+            if not TORCH_AVAILABLE or not hasattr(preprocessed, 'to'):
+                # Si le preprocessing a retourné numpy, utiliser simulation simple
+                return self._simple_simulation(image_path, simulation_type, analysis_results)
+            
+            input_tensor = preprocessed.to(self.device)
             
             # Générer la simulation
             with torch.no_grad():
@@ -198,6 +225,8 @@ class GANSimulationService:
     
     def _calculate_confidence_score(self, output_tensor):
         """Calculer le score de confiance"""
+        if not TORCH_AVAILABLE or not hasattr(output_tensor, 'var'):
+            return 0.5  # Score par défaut si torch n'est pas disponible
         # Calculer la variance comme indicateur de confiance
         variance = torch.var(output_tensor).item()
         confidence = max(0.0, min(1.0, 1.0 - variance))

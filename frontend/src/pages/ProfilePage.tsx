@@ -17,6 +17,7 @@ import {
   Alert,
   LinearProgress,
   Divider,
+  Slider,
 } from '@mui/material';
 import {
   ArrowBack as BackIcon,
@@ -241,6 +242,7 @@ const ProfilePage: React.FC = () => {
                   <MenuItem value="NORMAL">Normale</MenuItem>
                   <MenuItem value="SENSITIVE">Sensible</MenuItem>
                   <MenuItem value="MATURE">Mature</MenuItem>
+                  <MenuItem value="UNKNOWN">Je ne sais pas</MenuItem>
                 </Select>
               </FormControl>
               
@@ -266,6 +268,44 @@ const ProfilePage: React.FC = () => {
                 size="small"
                 variant="outlined"
               />
+              
+              <TextField
+                fullWidth
+                label="Heures de sommeil par nuit"
+                type="number"
+                value={user.sleep_hours || ''}
+                onChange={(e) => handleChange('sleep_hours', parseInt(e.target.value) || undefined)}
+                size="small"
+                inputProps={{ min: 0, max: 24 }}
+              />
+              
+              <Box>
+                <Typography gutterBottom sx={{ mb: 1, fontSize: '0.875rem' }}>
+                  Niveau de stress (1-10)
+                </Typography>
+                <Slider
+                  value={user.stress_level || 5}
+                  onChange={(e, value) => handleChange('stress_level', value)}
+                  min={1}
+                  max={10}
+                  step={1}
+                  marks
+                  valueLabelDisplay="auto"
+                />
+              </Box>
+              
+              <FormControl fullWidth size="small">
+                <InputLabel>Qualité de l'alimentation</InputLabel>
+                <Select
+                  value={user.diet_quality || ''}
+                  onChange={(e) => handleChange('diet_quality', e.target.value)}
+                >
+                  <MenuItem value="POOR">Faible</MenuItem>
+                  <MenuItem value="AVERAGE">Moyenne</MenuItem>
+                  <MenuItem value="GOOD">Bonne</MenuItem>
+                  <MenuItem value="EXCELLENT">Excellente</MenuItem>
+                </Select>
+              </FormControl>
             </Box>
           </CardContent>
         </Card>
@@ -302,28 +342,29 @@ const ProfilePage: React.FC = () => {
                 </Select>
               </FormControl>
               
-              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      checked={user.smoking || false}
-                      onChange={(e) => handleChange('smoking', e.target.checked)}
-                      size="small"
-                    />
-                  }
-                  label="Fumeur"
-                />
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      checked={user.alcohol || false}
-                      onChange={(e) => handleChange('alcohol', e.target.checked)}
-                      size="small"
-                    />
-                  }
-                  label="Consommation d'alcool"
-                />
-              </Box>
+              <FormControl fullWidth size="small">
+                <InputLabel>Fumeur</InputLabel>
+                <Select
+                  value={user.smoking === undefined ? '' : user.smoking ? 'yes' : 'no'}
+                  onChange={(e) => handleChange('smoking', e.target.value === 'yes')}
+                >
+                  <MenuItem value="yes">Oui</MenuItem>
+                  <MenuItem value="no">Non</MenuItem>
+                </Select>
+              </FormControl>
+              
+              <FormControl fullWidth size="small">
+                <InputLabel>Consommation d'alcool</InputLabel>
+                <Select
+                  value={user.alcohol_consumption || ''}
+                  onChange={(e) => handleChange('alcohol_consumption', e.target.value)}
+                >
+                  <MenuItem value="NONE">Aucune</MenuItem>
+                  <MenuItem value="OCCASIONAL">Occasionnelle</MenuItem>
+                  <MenuItem value="MODERATE">Modérée</MenuItem>
+                  <MenuItem value="HIGH">Élevée</MenuItem>
+                </Select>
+              </FormControl>
             </Box>
           </CardContent>
         </Card>

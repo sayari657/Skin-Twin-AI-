@@ -30,7 +30,6 @@ import {
 import {
   CameraAlt as CameraIcon,
   History as HistoryIcon,
-  Psychology as AIIcon,
   ShoppingCart as ProductIcon,
   TrendingUp as TrendingIcon,
   CheckCircle as CheckIcon,
@@ -233,27 +232,6 @@ const Dashboard: React.FC = () => {
           <Typography variant="h4" gutterBottom>
             👋 Bonjour {user?.first_name || user?.username} !
           </Typography>
-          <Typography variant="body1" color="text.secondary" sx={{ mb: 2 }}>
-            Votre assistant IA Skin Twin est prêt à vous aider
-          </Typography>
-          <Button
-            variant="contained"
-            startIcon={<AIIcon />}
-            onClick={handleAIConversation}
-            disabled={isAITalking}
-            size="medium"
-            sx={{
-              background: 'linear-gradient(45deg, #2196F3, #21CBF3)',
-              '&:hover': {
-                background: 'linear-gradient(45deg, #1976D2, #1CB5E0)',
-                transform: 'scale(1.05)',
-              },
-              transition: 'all 0.3s ease',
-              boxShadow: '0 4px 15px rgba(33, 150, 243, 0.3)',
-            }}
-          >
-            {isAITalking ? '🤖 IA en réflexion...' : '🎤 Parler à l\'IA (Mode vocal)'}
-          </Button>
         </Box>
       </Box>
 

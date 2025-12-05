@@ -1,0 +1,62 @@
+services:
+  # Backend Django
+  backend:
+    build:
+      context: ${PWD}
+      dockerfile: docker/Dockerfile.backend
+    container_name: skin_twin_backend
+    environment:
+      - DEBUG=1
+      - SECRET_KEY=${SECRET_KEY:-django-insecure-change-in-production-please-change-me}
+      - ALLOWED_HOSTS=localhost,127.0.0.1,0.0.0.0,backend
+      - GROQ_API_KEY=${GROQ_API_KEY:-}
+      - GROQ_MODEL=${GROQ_MODEL:-llama-3.1-8b-instant}
+    volumes:
+      # Volume pour la base de données SQLite (persistante) - monter comme répertoire
+      - backend_db:/app/data
+      # Volume pour les médias (images uploadées)
+      - backend_media:/app/media
+      # Volume pour les fichiers statiques
+      - backend_static:/app/staticfiles
+    ports:
+      - "8000:8000"
+    networks:
+      - skin_twin_network
+    healthcheck:
+      test: ["CMD", "python", "-c", "import sys; sys.exit(0)"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Frontend React
+  frontend:
+    build:
+      context: ${PWD}
+      dockerfile: docker/Dockerfile.frontend
+    container_name: skin_twin_frontend
+    environment:
+      - REACT_APP_API_URL=http://localhost:8000/api
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    networks:
+      - skin_twin_network
+
+volumes:
+  backend_db:
+    driver: local
+  backend_media:
+    driver: local
+  backend_static:
+    driver: local
+
+networks:
+  skin_twin_network:
+    driver: bridge
+
+
+
+
+

@@ -41,7 +41,8 @@ class User(AbstractUser):
             ('OILY', 'Grasse'),
             ('COMBINATION', 'Mixte'),
             ('NORMAL', 'Normale'),
-            ('SENSITIVE', 'Sensible')
+            ('SENSITIVE', 'Sensible'),
+            ('UNKNOWN', 'Je ne sais pas')
         ],
         null=True, blank=True
     )
@@ -90,14 +91,27 @@ class User(AbstractUser):
         ],
         null=True, blank=True
     )
-    smoking = models.BooleanField(default=False)
-    alcohol = models.BooleanField(default=False)
-    sleep_hours = models.CharField(
+    smoking = models.BooleanField(default=False, null=True, blank=True)
+    alcohol = models.BooleanField(default=False, null=True, blank=True)
+    sleep_hours = models.IntegerField(null=True, blank=True, help_text="Nombre d'heures de sommeil par nuit")
+    stress_level = models.IntegerField(null=True, blank=True, help_text="Niveau de stress de 1 à 10")
+    diet_quality = models.CharField(
         max_length=20,
         choices=[
-            ('LOW', '<5h'),
-            ('MODERATE', '5-7h'),
-            ('HIGH', '>7h')
+            ('POOR', 'Faible'),
+            ('AVERAGE', 'Moyenne'),
+            ('GOOD', 'Bonne'),
+            ('EXCELLENT', 'Excellente')
+        ],
+        null=True, blank=True
+    )
+    alcohol_consumption = models.CharField(
+        max_length=20,
+        choices=[
+            ('NONE', 'Aucune'),
+            ('OCCASIONAL', 'Occasionnelle'),
+            ('MODERATE', 'Modérée'),
+            ('HIGH', 'Élevée')
         ],
         null=True, blank=True
     )

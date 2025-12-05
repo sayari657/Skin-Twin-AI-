@@ -1,29 +1,44 @@
-FROM node:18-alpine
+FROM node:20-alpine AS builder
 
 # Définir le répertoire de travail
 WORKDIR /app
+
+# Configurer npm pour utiliser un cache local et éviter les problèmes de système de fichiers en lecture seule
+RUN npm config set cache /tmp/.npm --global
 
 # Copier les fichiers package
 COPY frontend/package*.json ./
 
 # Installer les dépendances
-RUN npm ci --only=production
+# Utiliser npm install au lieu de npm ci pour plus de flexibilité
+# Nettoyer le cache avant l'installation pour éviter les problèmes
+RUN npm cache clean --force && \
+    npm install --legacy-peer-deps --no-audit --no-fund
 
 # Copier le code source
 COPY frontend/ ./
 
-# Construire l'application
+# Construire l'application React
 RUN npm run build
 
-# Installer un serveur web simple
-RUN npm install -g serve
+# Stage de production - serveur web léger
+FROM node:20-alpine
+
+WORKDIR /app
+
+# Configurer npm pour utiliser un cache local
+RUN npm config set cache /tmp/.npm --global
+
+# Installer serve pour servir les fichiers statiques et wget pour le healthcheck
+RUN npm cache clean --force && \
+    npm install -g serve && \
+    apk add --no-cache wget
+
+# Copier les fichiers build depuis le stage builder
+COPY --from=builder /app/build ./build
 
 # Exposer le port
 EXPOSE 3000
 
-# Commande par défaut
-CMD ["serve", "-s", "build", "-l", "3000"]
-
-
-
-
+# Commande pour servir l'application
+CMD ["serve", "-s", "build", "-l", "3000", "-n"]

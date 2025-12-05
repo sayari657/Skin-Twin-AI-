@@ -1,51 +1,38 @@
-version: '3.8'
-
 services:
-  # Base de données MySQL
-  db:
-    image: mysql:8.0
-    container_name: skin_twin_db
-    environment:
-      MYSQL_ROOT_PASSWORD: password
-      MYSQL_DATABASE: skin_twin_ai
-      MYSQL_USER: skin_user
-      MYSQL_PASSWORD: skin_password
-    volumes:
-      - mysql_data:/var/lib/mysql
-    ports:
-      - "3306:3306"
-    networks:
-      - skin_twin_network
-
   # Backend Django
   backend:
     build:
-      context: ..
+      context: .
       dockerfile: docker/Dockerfile.backend
     container_name: skin_twin_backend
     environment:
-      - DEBUG=0
-      - DATABASE_URL=mysql://skin_user:skin_password@db:3306/skin_twin_ai
-      - SECRET_KEY=your-secret-key-here-change-in-production
+      - DEBUG=1
+      - SECRET_KEY=${SECRET_KEY:-django-insecure-change-in-production-please-change-me}
+      - ALLOWED_HOSTS=localhost,127.0.0.1,0.0.0.0,backend
+      - GROQ_API_KEY=${GROQ_API_KEY:-}
+      - GROQ_MODEL=${GROQ_MODEL:-llama-3.1-8b-instant}
     volumes:
-      - ../backend:/app
-      - media_data:/app/media
-      - static_data:/app/staticfiles
+      # Volume pour la base de données SQLite (persistante) - monter comme répertoire
+      - backend_db:/app/data
+      # Volume pour les médias (images uploadées)
+      - backend_media:/app/media
+      # Volume pour les fichiers statiques
+      - backend_static:/app/staticfiles
     ports:
       - "8000:8000"
-    depends_on:
-      - db
     networks:
       - skin_twin_network
-    command: >
-      sh -c "python manage.py migrate &&
-             python manage.py collectstatic --noinput &&
-             gunicorn --bind 0.0.0.0:8000 skin_ai.wsgi:application"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import sys; sys.exit(0)"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
 
   # Frontend React
   frontend:
     build:
-      context: ..
+      context: .
       dockerfile: docker/Dockerfile.frontend
     container_name: skin_twin_frontend
     environment:
@@ -57,44 +44,14 @@ services:
     networks:
       - skin_twin_network
 
-  # Redis (pour Celery)
-  redis:
-    image: redis:7-alpine
-    container_name: skin_twin_redis
-    ports:
-      - "6379:6379"
-    networks:
-      - skin_twin_network
-
-  # Celery Worker
-  celery:
-    build:
-      context: ..
-      dockerfile: docker/Dockerfile.backend
-    container_name: skin_twin_celery
-    environment:
-      - DEBUG=0
-      - DATABASE_URL=mysql://skin_user:skin_password@db:3306/skin_twin_ai
-      - CELERY_BROKER_URL=redis://redis:6379/0
-    volumes:
-      - ../backend:/app
-      - media_data:/app/media
-    depends_on:
-      - db
-      - redis
-    networks:
-      - skin_twin_network
-    command: celery -A skin_ai worker --loglevel=info
-
 volumes:
-  mysql_data:
-  media_data:
-  static_data:
+  backend_db:
+    driver: local
+  backend_media:
+    driver: local
+  backend_static:
+    driver: local
 
 networks:
   skin_twin_network:
     driver: bridge
-
-
-
-

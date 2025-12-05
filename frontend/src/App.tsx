@@ -17,36 +17,38 @@ import ResultsPage from './pages/ResultsPage';
 import HistoryPage from './pages/HistoryPage';
 import ProfilePage from './pages/ProfilePage';
 import ProductsPage from './pages/ProductsPage';
+import RecommendationsPage from './pages/RecommendationsPage';
+import TransformationPage from './pages/TransformationPage';
 
 // Components
 import ProtectedRoute from './components/ProtectedRoute';
 import Navbar from './components/Navbar';
 import ApiHealthMonitor from './components/ApiHealthMonitor';
 
-// Sky Blue Professional Theme
+// PERFECT Style Theme - Beige and Dark Pink Professional Theme
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#87CEEB', // Sky blue
-      light: '#B0E0E6',
-      dark: '#4682B4',
+      main: '#C2185B', // Rose foncée
+      light: '#E91E63',
+      dark: '#880E4F',
       contrastText: '#ffffff',
     },
     secondary: {
-      main: '#4169E1', // Royal blue
-      light: '#6495ED',
-      dark: '#191970',
+      main: '#D4A574', // Beige
+      light: '#E8C9A3',
+      dark: '#B8935A',
       contrastText: '#ffffff',
     },
     success: {
-      main: '#87CEEB',
-      light: '#B0E0E6',
-      dark: '#4682B4',
+      main: '#E91E63',
+      light: '#F48FB1',
+      dark: '#C2185B',
     },
     warning: {
-      main: '#F57C00',
+      main: '#FF9800',
       light: '#FFB74D',
-      dark: '#E65100',
+      dark: '#F57C00',
     },
     error: {
       main: '#D32F2F',
@@ -54,12 +56,12 @@ const theme = createTheme({
       dark: '#C62828',
     },
     info: {
-      main: '#1976D2',
-      light: '#42A5F5',
-      dark: '#0D47A1',
+      main: '#E91E63',
+      light: '#F48FB1',
+      dark: '#C2185B',
     },
     background: {
-      default: '#FAFAFA',
+      default: '#F5F5F0', // Beige clair
       paper: '#FFFFFF',
     },
     text: {
@@ -72,24 +74,24 @@ const theme = createTheme({
     h1: {
       fontWeight: 700,
       fontSize: '2.5rem',
-      color: '#1B5E20',
+      color: '#212121',
       letterSpacing: '-0.02em',
     },
     h2: {
-      fontWeight: 600,
+      fontWeight: 700,
       fontSize: '2rem',
-      color: '#2E7D32',
+      color: '#212121',
       letterSpacing: '-0.01em',
     },
     h3: {
       fontWeight: 600,
       fontSize: '1.75rem',
-      color: '#2E7D32',
+      color: '#212121',
     },
     h4: {
-      fontWeight: 500,
+      fontWeight: 600,
       fontSize: '1.5rem',
-      color: '#424242',
+      color: '#212121',
     },
     h5: {
       fontWeight: 500,
@@ -172,10 +174,10 @@ const theme = createTheme({
           '& .MuiOutlinedInput-root': {
             borderRadius: 8,
             '&:hover .MuiOutlinedInput-notchedOutline': {
-              borderColor: '#2E7D32',
+              borderColor: '#E91E63',
             },
             '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-              borderColor: '#2E7D32',
+              borderColor: '#E91E63',
               borderWidth: 2,
             },
           },
@@ -270,6 +272,22 @@ const App: React.FC = () => {
                   element={
                     <ProtectedRoute>
                       <ProductsPage />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/recommendations/:analysisId"
+                  element={
+                    <ProtectedRoute>
+                      <RecommendationsPage />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/transformation/:analysisId"
+                  element={
+                    <ProtectedRoute>
+                      <TransformationPage />
                     </ProtectedRoute>
                   }
                 />

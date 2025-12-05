@@ -7,25 +7,26 @@ ENV PYTHONUNBUFFERED=1
 # Définir le répertoire de travail
 WORKDIR /app
 
-# Installer les dépendances système
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends \
-        build-essential \
-        libmysqlclient-dev \
-        pkg-config \
-        libgl1-mesa-glx \
-        libglib2.0-0 \
-        libsm6 \
-        libxext6 \
-        libxrender-dev \
-        libgomp1 \
+# Installer les dépendances système nécessaires (simplifié pour SQLite)
+# Ajout des dépendances pour OpenCV (cv2)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    libgl1 \
+    libglib2.0-0 \
+    curl \
+    libsm6 \
+    libxext6 \
+    libxrender-dev \
+    libgomp1 \
     && rm -rf /var/lib/apt/lists/*
 
-# Copier les requirements et installer les dépendances Python
-COPY backend/requirements.txt /app/
-RUN pip install --no-cache-dir -r requirements.txt
+# Copier et installer les dépendances Python
+# Utiliser requirements-docker.txt (sans mysqlclient, optimisé pour Docker)
+COPY docker/requirements-docker.txt /app/requirements.txt
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir -r /app/requirements.txt
 
-# Copier le code de l'application
+# Copier le code de l'application backend
 COPY backend/ /app/
 
 # Créer les répertoires nécessaires
@@ -34,9 +35,20 @@ RUN mkdir -p /app/media /app/staticfiles /app/logs
 # Exposer le port
 EXPOSE 8000
 
+# Script de démarrage - créer le script avec des commandes séparées pour éviter les problèmes de formatage
+RUN echo '#!/bin/bash' > /app/entrypoint.sh && \
+    echo 'set -e' >> /app/entrypoint.sh && \
+    echo 'echo "🚀 Démarrage du backend Skin Twin AI..."' >> /app/entrypoint.sh && \
+    echo 'echo "📦 Initialisation de la base de données..."' >> /app/entrypoint.sh && \
+    echo 'mkdir -p /app/data && touch /app/data/db.sqlite3 && chmod 666 /app/data/db.sqlite3 || true' >> /app/entrypoint.sh && \
+    echo 'echo "📦 Exécution des migrations..."' >> /app/entrypoint.sh && \
+    echo 'python manage.py migrate --noinput' >> /app/entrypoint.sh && \
+    echo 'echo "📁 Collecte des fichiers statiques..."' >> /app/entrypoint.sh && \
+    echo 'python manage.py collectstatic --noinput || true' >> /app/entrypoint.sh && \
+    echo 'echo "✅ Démarrage du serveur Django..."' >> /app/entrypoint.sh && \
+    echo 'exec gunicorn --bind 0.0.0.0:8000 --workers 2 --timeout 120 skin_ai.wsgi:application' >> /app/entrypoint.sh && \
+    sed -i 's/\r$//' /app/entrypoint.sh && \
+    chmod +x /app/entrypoint.sh
+
 # Commande par défaut
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "skin_ai.wsgi:application"]
-
-
-
-
+CMD ["/bin/bash", "/app/entrypoint.sh"]

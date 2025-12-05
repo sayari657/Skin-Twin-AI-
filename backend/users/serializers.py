@@ -17,7 +17,7 @@ class UserRegistrationSerializer(serializers.Serializer):
     location_country = serializers.CharField(max_length=100, required=False, allow_blank=True, allow_null=True)
     location_region = serializers.CharField(max_length=100, required=False, allow_blank=True, allow_null=True)
     skin_type = serializers.ChoiceField(
-        choices=[('DRY', 'Sèche'), ('OILY', 'Grasse'), ('COMBINATION', 'Mixte'), ('NORMAL', 'Normale'), ('SENSITIVE', 'Sensible')],
+        choices=[('DRY', 'Sèche'), ('OILY', 'Grasse'), ('COMBINATION', 'Mixte'), ('NORMAL', 'Normale'), ('SENSITIVE', 'Sensible'), ('UNKNOWN', 'Je ne sais pas')],
         required=False, allow_null=True
     )
     
@@ -45,10 +45,16 @@ class UserRegistrationSerializer(serializers.Serializer):
         choices=[('LOW', 'Faible'), ('MODERATE', 'Modérée'), ('HIGH', 'Élevée')],
         required=False, allow_null=True
     )
-    smoking = serializers.BooleanField(required=False, default=False)
-    alcohol = serializers.BooleanField(required=False, default=False)
-    sleep_hours = serializers.ChoiceField(
-        choices=[('LOW', 'Faible'), ('MODERATE', 'Modérée'), ('HIGH', 'Élevée')],
+    smoking = serializers.BooleanField(required=False, allow_null=True)
+    alcohol = serializers.BooleanField(required=False, allow_null=True)
+    sleep_hours = serializers.IntegerField(required=False, allow_null=True, min_value=0, max_value=24)
+    stress_level = serializers.IntegerField(required=False, allow_null=True, min_value=1, max_value=10)
+    diet_quality = serializers.ChoiceField(
+        choices=[('POOR', 'Faible'), ('AVERAGE', 'Moyenne'), ('GOOD', 'Bonne'), ('EXCELLENT', 'Excellente')],
+        required=False, allow_null=True
+    )
+    alcohol_consumption = serializers.ChoiceField(
+        choices=[('NONE', 'Aucune'), ('OCCASIONAL', 'Occasionnelle'), ('MODERATE', 'Modérée'), ('HIGH', 'Élevée')],
         required=False, allow_null=True
     )
     
@@ -160,7 +166,8 @@ class UserProfileSerializer(serializers.ModelSerializer):
             'skin_type', 'diabetes', 'hypertension', 'blood_disorders',
             'autoimmune_diseases', 'pregnancy', 'sun_exposure',
             'sunscreen_usage', 'diet', 'hydration', 'smoking',
-            'alcohol', 'sleep_hours', 'family_dermatological_history',
+            'alcohol', 'sleep_hours', 'stress_level', 'diet_quality',
+            'alcohol_consumption', 'family_dermatological_history',
             'current_skin_problems', 'current_treatments',
             'current_cosmetics', 'known_allergies', 'skin_goals',
             'date_joined', 'last_login'

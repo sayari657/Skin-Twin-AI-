@@ -187,6 +187,24 @@ class ApiService {
     return this.api.delete(`/detection/analysis/${analysisId}/delete/`);
   }
 
+  // Méthode pour la transformation de peau
+  async createTransformation(
+    analysisId: number,
+    filterType: string,
+    skinSmoothness: number,
+    defectReduction: number,
+    brightness: number,
+    glow: number
+  ): Promise<AxiosResponse<{ avant: string; '1_mois': string; '2_mois': string; '3_mois': string }>> {
+    return this.api.post(`/detection/transformation/${analysisId}/`, {
+      filter_type: filterType,
+      skin_smoothness: skinSmoothness,
+      defect_reduction: defectReduction,
+      brightness: brightness,
+      glow: glow,
+    });
+  }
+
   // Méthodes pour les recommandations
   async getRecommendations(analysisId: number): Promise<AxiosResponse<Recommendation[]>> {
     return this.api.get(`/recommendations/analysis/${analysisId}/`);

@@ -1,0 +1,34 @@
+# Configuration DVC pour versioning des données
+stages:
+  download_kaggle_dataset:
+    cmd: python mlops/data/download_kaggle_dataset.py
+    outs:
+      - data/raw/face_trouble_dataset
+    always_changed: true
+    
+  setup_xgboost_data:
+    cmd: python mlops/data/setup_xgboost_data.py
+    outs:
+      - data/raw/fusion_features_wiki.csv
+    always_changed: true
+    
+  prepare_data:
+    cmd: python mlops/data/data_preprocessor.py
+    deps:
+      - data/raw/face_trouble_dataset
+      - data/raw/fusion_features_wiki.csv
+    outs:
+      - data/processed
+    
+  train:
+    cmd: python mlops/pipelines/training_pipeline.py
+    deps:
+      - data/processed
+      - mlops/training
+    outs:
+      - models/yolo.pt
+      - models/efficientnet.pth
+      - models/xgboost.joblib
+    metrics:
+      - metrics.json
+

@@ -20,7 +20,6 @@ import {
   Visibility as ViewIcon,
   Delete as DeleteIcon,
   CameraAlt as CameraIcon,
-  Psychology as AIIcon,
 } from '@mui/icons-material';
 import { apiService } from '../services/api';
 import { SkinAnalysis } from '../types';
@@ -162,27 +161,6 @@ const HistoryPage: React.FC = () => {
           <Typography variant="h4" gutterBottom>
             📚 Historique des Analyses
           </Typography>
-          <Typography variant="body1" color="text.secondary" sx={{ mb: 2 }}>
-            Votre assistant IA Skin Twin peut analyser l'évolution de votre peau
-          </Typography>
-          <Button
-            variant="contained"
-            startIcon={<AIIcon />}
-            onClick={handleAIConversation}
-            disabled={isAITalking}
-            size="medium"
-            sx={{
-              background: 'linear-gradient(45deg, #2196F3, #21CBF3)',
-              '&:hover': {
-                background: 'linear-gradient(45deg, #1976D2, #1CB5E0)',
-                transform: 'scale(1.05)',
-              },
-              transition: 'all 0.3s ease',
-              boxShadow: '0 4px 15px rgba(33, 150, 243, 0.3)',
-            }}
-          >
-            {isAITalking ? '🤖 IA en réflexion...' : '🎤 Parler à l\'IA (Mode vocal)'}
-          </Button>
         </Box>
       </Box>
 

@@ -5,7 +5,7 @@ from rest_framework import status
 from django.shortcuts import get_object_or_404
 import os
 import requests
-from .models import ChatSession
+from .models import ChatSession, ChatMessage
 from .serializers import ChatSessionSerializer
 from .services import ChatAIService
 
@@ -129,16 +129,33 @@ Quelle question spécifique vous intéresse ? Dites-moi ce que vous voulez savoi
 
 # GROQ configuration via environment variables
 # Essaie d'abord les variables d'environnement, puis le fichier local, puis None
+import sys
+import os
+
+# Ajouter le répertoire parent au path pour l'import
+backend_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if backend_dir not in sys.path:
+    sys.path.insert(0, backend_dir)
+
 try:
-    from ..config_local import GROQ_API_KEY_LOCAL, GROQ_MODEL_LOCAL
+    from config_local import GROQ_API_KEY_LOCAL, GROQ_MODEL_LOCAL
     GROQ_API_KEY = os.environ.get('GROQ_API_KEY') or GROQ_API_KEY_LOCAL
     GROQ_MODEL = os.environ.get('GROQ_MODEL') or GROQ_MODEL_LOCAL
-except ImportError:
+    print(f"Groq config chargée depuis config_local.py")
+except ImportError as e:
     # Fichier config_local.py n'existe pas ou n'a pas les variables
     GROQ_API_KEY = os.environ.get('GROQ_API_KEY')
     GROQ_MODEL = os.environ.get('GROQ_MODEL', 'llama-3.1-8b-instant')
+    if not GROQ_API_KEY:
+        print(f"ATTENTION: GROQ_API_KEY non configurée! Import error: {e}")
 
 GROQ_URL = 'https://api.groq.com/openai/v1/chat/completions'
+
+# Debug: afficher si la clé est configurée
+if GROQ_API_KEY:
+    print(f"Groq API Key configurée: {GROQ_API_KEY[:20]}...")
+else:
+    print("ATTENTION: Groq API Key NON configurée!")
 
 @api_view(['POST'])
 @permission_classes([AllowAny])
@@ -146,15 +163,69 @@ def chat_with_ai(request):
     try:
         user_msg = (request.data or {}).get('message', '')
         history = (request.data or {}).get('history', [])  # optional: [{role, content}]
+        session_id = request.data.get('session_id')
+        analysis_context = request.data.get('analysis_context')  # Contexte d'analyse de peau
         if not isinstance(history, list):
             history = []
 
+        # Obtenir ou créer une session de chat
+        chat_session = None
+        user = None
+        
+        # Tenter de récupérer l'utilisateur authentifié
+        if request.user.is_authenticated:
+            user = request.user
+            chat_service = ChatAIService()
+            
+            # Obtenir ou créer la session
+            if session_id:
+                try:
+                    chat_session = ChatSession.objects.get(session_id=session_id, user=user)
+                except ChatSession.DoesNotExist:
+                    chat_session = chat_service.create_session(user)
+            else:
+                chat_session = chat_service.create_session(user)
+            
+            # Sauvegarder le message utilisateur dans la base de données
+            if chat_session and user_msg:
+                ChatMessage.objects.create(
+                    session=chat_session,
+                    role='user',
+                    content=user_msg,
+                    tokens_used=0
+                )
+
         # Build messages for OpenAI-compatible Chat Completions API
         messages = []
-        system_prompt = (request.data or {}).get('system') or """Tu es Skin Twin AI, un assistant dermatologique intelligent et amical. 
+        
+        # Construire le prompt système avec contexte d'analyse si fourni
+        base_system_prompt = """Tu es Skin Twin AI, un assistant dermatologique intelligent et amical. 
 Tu parles de manière naturelle, conversationnelle et empathique en français.
 Tu réponds librement aux questions sur les soins de la peau, comme un ami expert.
-Sois chaleureux, professionnel mais accessible, et n'hésite pas à donner des conseils pratiques et détaillés."""
+Sois chaleureux, professionnel mais accessible, et n'hésite pas à donner des conseils pratiques et détaillés.
+Tu peux répondre à TOUTES les questions, même si elles ne sont pas directement liées aux soins de la peau.
+Réponds de manière naturelle et conversationnelle, comme dans une vraie discussion."""
+        
+        # Si un prompt système personnalisé est fourni, l'utiliser
+        custom_system = (request.data or {}).get('system')
+        if custom_system:
+            system_prompt = custom_system
+        elif analysis_context:
+            # Intégrer le contexte d'analyse dans le prompt système
+            try:
+                import json
+                context_data = json.loads(analysis_context)
+                system_prompt = f"""{base_system_prompt}
+
+CONTEXTE DE L'ANALYSE ACTUELLE DE L'UTILISATEUR:
+{json.dumps(context_data, indent=2, ensure_ascii=False)}
+
+Tu dois répondre en tenant compte de ces résultats d'analyse spécifiques. Explique ce que signifient les détections, donne des conseils personnalisés et propose des routines adaptées."""
+            except:
+                system_prompt = base_system_prompt
+        else:
+            system_prompt = base_system_prompt
+            
         messages.append({"role": "system", "content": system_prompt})
         for m in history:
             if isinstance(m, dict) and 'role' in m and 'content' in m:
@@ -162,9 +233,26 @@ Sois chaleureux, professionnel mais accessible, et n'hésite pas à donner des c
         messages.append({"role": "user", "content": user_msg})
 
         if not GROQ_API_KEY:
+            print("ATTENTION: GROQ_API_KEY non configurée!")
+            print("Vérifiez que config_local.py existe ou que GROQ_API_KEY est dans les variables d'environnement")
+            # Utiliser le fallback seulement si vraiment pas de clé
+            fallback_response = generate_fallback_response(user_msg)
+            
+            # Sauvegarder la réponse fallback dans la base de données si utilisateur authentifié
+            if chat_session and user:
+                ChatMessage.objects.create(
+                    session=chat_session,
+                    role='assistant',
+                    content=fallback_response,
+                    tokens_used=0
+                )
+            
             return Response({
-                "response": "Clé GROQ non configurée (GROQ_API_KEY). Ajoutez-la puis relancez le serveur.",
-                "note": "missing_groq_api_key"
+                "response": fallback_response,
+                "note": "missing_groq_api_key",
+                "session_id": chat_session.session_id if chat_session else request.data.get('session_id', ''),
+                "tokens_used": 0,
+                "timestamp": None
             }, status=status.HTTP_200_OK)
 
         headers = {
@@ -174,8 +262,8 @@ Sois chaleureux, professionnel mais accessible, et n'hésite pas à donner des c
         payload = {
             'model': GROQ_MODEL,
             'messages': messages,
-            'temperature': 0.8,  # Plus créatif et conversationnel
-            'max_tokens': 1000,
+            'temperature': 0.9,  # Plus créatif et conversationnel (augmenté pour plus de liberté)
+            'max_tokens': 1500,  # Augmenté pour permettre des réponses plus longues
         }
         res = requests.post(GROQ_URL, json=payload, headers=headers, timeout=60)
         
@@ -185,31 +273,47 @@ Sois chaleureux, professionnel mais accessible, et n'hésite pas à donner des c
         print(f"{'='*60}")
         print(f"URL: {GROQ_URL}")
         print(f"Model: {GROQ_MODEL}")
-        print(f"API Key: {GROQ_API_KEY[:20]}...")
+        print(f"API Key: {'CONFIGURÉE' if GROQ_API_KEY else 'NON CONFIGURÉE'}")
+        print(f"User Message: {user_msg[:100]}")
         print(f"Status Code: {res.status_code}")
-        print(f"Response: {res.text[:500]}")
         print(f"{'='*60}\n")
         
         if res.status_code != 200:
             error_msg = res.text[:300] if res.text else "Pas de réponse"
             print(f"Groq API Error: {res.status_code} - {error_msg}")
-            # Fallback: réponse locale intelligente
+            # Fallback: réponse locale intelligente seulement si Groq échoue
             fallback_response = generate_fallback_response(user_msg)
+            
+            # Sauvegarder la réponse fallback dans la base de données si utilisateur authentifié
+            if chat_session and user:
+                ChatMessage.objects.create(
+                    session=chat_session,
+                    role='assistant',
+                    content=fallback_response,
+                    tokens_used=0
+                )
+            
             return Response({
                 "response": fallback_response,
                 "note": f"groq_error_{res.status_code}",
-                "session_id": request.data.get('session_id', ''),
+                "session_id": chat_session.session_id if chat_session else request.data.get('session_id', ''),
                 "tokens_used": 0,
                 "timestamp": None
             }, status=status.HTTP_200_OK)
 
         data = res.json()
         ai_text = ''
+        tokens_used = 0
+        
         # OpenAI-compatible: choices[0].message.content
         if isinstance(data, dict):
             choices = data.get('choices') or []
             if choices and len(choices) > 0 and 'message' in choices[0]:
                 ai_text = choices[0]['message'].get('content', '')
+            
+            # Récupérer l'usage de tokens si disponible
+            usage = data.get('usage', {})
+            tokens_used = usage.get('total_tokens', 0)
             
             # Si pas de contenu, vérifier usage de tokens
             if not ai_text:
@@ -218,22 +322,45 @@ Sois chaleureux, professionnel mais accessible, et n'hésite pas à donner des c
                     print(f"Groq API Error in response: {data['error']}")
                     # Fallback si erreur dans la réponse
                     fallback_response = generate_fallback_response(user_msg)
+                    
+                    # Sauvegarder la réponse fallback dans la base de données si utilisateur authentifié
+                    if chat_session and user:
+                        ChatMessage.objects.create(
+                            session=chat_session,
+                            role='assistant',
+                            content=fallback_response,
+                            tokens_used=0
+                        )
+                    
                     return Response({
                         "response": fallback_response,
                         "note": f"groq_api_error: {data.get('error', 'unknown')}",
-                        "session_id": request.data.get('session_id', ''),
+                        "session_id": chat_session.session_id if chat_session else request.data.get('session_id', ''),
                         "tokens_used": 0,
                         "timestamp": None
                     }, status=status.HTTP_200_OK)
         
         if not ai_text:
-            print(f"Warning: No AI text generated, using fallback")
+            print(f"Warning: No AI text generated from Groq, using fallback")
             ai_text = generate_fallback_response(user_msg)
-
+        
+        # Sauvegarder la réponse de l'IA dans la base de données si utilisateur authentifié
+        if chat_session and user:
+            ChatMessage.objects.create(
+                session=chat_session,
+                role='assistant',
+                content=ai_text,
+                tokens_used=tokens_used
+            )
+            # Mettre à jour la date de modification de la session
+            chat_session.save()
+        
+        print(f"Groq Response (preview): {ai_text[:200]}...")
+        
         return Response({
             "response": ai_text,
-            "session_id": request.data.get('session_id', ''),
-            "tokens_used": 0,
+            "session_id": chat_session.session_id if chat_session else request.data.get('session_id', ''),
+            "tokens_used": tokens_used,
             "timestamp": None
         }, status=status.HTTP_200_OK)
     except Exception as e:
@@ -247,12 +374,16 @@ Sois chaleureux, professionnel mais accessible, et n'hésite pas à donner des c
 
 
 @api_view(['GET'])
-@permission_classes([IsAuthenticated])
+@permission_classes([AllowAny])  # Public pour permettre l'accès sans authentification
 def get_chat_sessions(request):
     """Récupère les sessions de chat de l'utilisateur"""
-    sessions = ChatSession.objects.filter(user=request.user, is_active=True).order_by('-updated_at')
-    serializer = ChatSessionSerializer(sessions, many=True)
-    return Response(serializer.data)
+    # Si l'utilisateur est authentifié, retourner ses sessions
+    if request.user.is_authenticated:
+        sessions = ChatSession.objects.filter(user=request.user, is_active=True).order_by('-updated_at')
+        serializer = ChatSessionSerializer(sessions, many=True)
+        return Response(serializer.data)
+    # Sinon, retourner une liste vide
+    return Response([], status=status.HTTP_200_OK)
 
 
 @api_view(['GET'])

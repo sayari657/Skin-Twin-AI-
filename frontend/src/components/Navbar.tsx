@@ -11,6 +11,7 @@ import {
   Box,
   Avatar,
   Divider,
+  Container,
 } from '@mui/material';
 import {
   Menu as MenuIcon,
@@ -22,7 +23,8 @@ import {
   ShoppingCart as ProductIcon,
   Logout as LogoutIcon,
   Home as HomeIcon,
-  MedicalServices as MedicalIcon,
+  Search as SearchIcon,
+  Language as LanguageIcon,
 } from '@mui/icons-material';
 import { apiService } from '../services/api';
 
@@ -34,14 +36,6 @@ const Navbar: React.FC = () => {
 
   const isAuthenticated = apiService.isAuthenticated();
   const isHomePage = location.pathname === '/';
-  
-  // Debug logs
-  console.log('Navbar - État d\'authentification:', {
-    isAuthenticated,
-    accessToken: localStorage.getItem('access_token'),
-    refreshToken: localStorage.getItem('refresh_token'),
-    currentPath: location.pathname
-  });
 
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -133,11 +127,6 @@ const Navbar: React.FC = () => {
       onClose={handleMenuClose}
     >
       <MenuItem onClick={() => { 
-        console.log('Navbar - Clic sur profil, navigation vers /profile');
-        console.log('Navbar - Tokens avant navigation:', {
-          accessToken: localStorage.getItem('access_token'),
-          refreshToken: localStorage.getItem('refresh_token')
-        });
         navigate('/profile'); 
         handleMenuClose(); 
       }}>
@@ -154,123 +143,179 @@ const Navbar: React.FC = () => {
   return (
     <AppBar 
       position="static" 
+      elevation={0}
       sx={{ 
-        bgcolor: isHomePage ? 'transparent' : 'primary.main',
-        boxShadow: isHomePage ? 'none' : 1,
+        bgcolor: '#424242', // Gris foncé
+        borderBottom: '1px solid rgba(255,255,255,0.1)',
+        boxShadow: '0 2px 8px rgba(0,0,0,0.2)',
       }}
     >
-      <Toolbar>
-        <Typography
-          variant="h6"
-          component={RouterLink}
-          to="/"
-          sx={{
-            flexGrow: 1,
-            textDecoration: 'none',
-            color: 'inherit',
-            fontWeight: 'bold',
-            fontSize: '1.5rem',
-            display: 'flex',
-            alignItems: 'center',
-            gap: 1,
-          }}
-        >
-          <MedicalIcon sx={{ fontSize: '1.8rem' }} />
-          Skin Twin AI
-        </Typography>
+      <Container maxWidth="lg">
+        <Toolbar sx={{ py: 2, px: 0 }}>
+          {/* Logo */}
+          <Typography
+            variant="h6"
+            component={RouterLink}
+            to="/"
+            sx={{
+              textDecoration: 'none',
+              fontWeight: 700,
+              fontSize: '1.5rem',
+              display: 'flex',
+              alignItems: 'center',
+              mr: 4,
+              color: '#FFFFFF',
+            }}
+          >
+            <Box
+              component="span"
+              sx={{
+                color: '#D4A574', // Beige
+                fontWeight: 400,
+              }}
+            >
+              SKIN-
+            </Box>
+            <Box
+              component="span"
+              sx={{
+                color: '#FFFFFF',
+                fontWeight: 700,
+              }}
+            >
+              TWIN
+            </Box>
+          </Typography>
 
-        {isAuthenticated ? (
-          <>
-            {/* Desktop Menu */}
-            <Box sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center', gap: 1 }}>
+          {/* Main Navigation - Desktop */}
+          {isAuthenticated && (
+            <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 1, flexGrow: 1 }}>
               {menuItems.map((item) => (
                 <Button
                   key={item.path}
                   component={RouterLink}
                   to={item.path}
-                  color="inherit"
-                  startIcon={item.icon}
                   sx={{
-                    color: isHomePage ? 'white' : 'inherit',
+                    color: '#FFFFFF',
+                    fontWeight: 500,
+                    fontSize: '0.95rem',
+                    textTransform: 'none',
                     '&:hover': {
-                      bgcolor: isHomePage ? 'rgba(255,255,255,0.1)' : 'rgba(255,255,255,0.1)',
+                      bgcolor: 'rgba(255,255,255,0.1)',
+                      color: '#D4A574', // Beige au survol
                     },
                   }}
                 >
                   {item.label}
                 </Button>
               ))}
-              <IconButton
-                size="large"
-                edge="end"
-                aria-label="compte"
-                aria-controls="profile-menu"
-                aria-haspopup="true"
-                onClick={handleProfileMenuOpen}
-                color="inherit"
-              >
-                <Avatar sx={{ width: 32, height: 32, bgcolor: 'secondary.main' }}>
-                  <AccountCircle />
-                </Avatar>
-              </IconButton>
             </Box>
+          )}
 
-            {/* Mobile Menu */}
-            <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
-              <IconButton
-                size="large"
-                aria-label="menu"
-                aria-controls="mobile-menu"
-                aria-haspopup="true"
-                onClick={handleMobileMenuOpen}
-                color="inherit"
-              >
-                <MenuIcon />
-              </IconButton>
-            </Box>
-          </>
-        ) : (
-          <Box sx={{ display: 'flex', gap: 1 }}>
-            <Button
-              component={RouterLink}
-              to="/login"
-              color="inherit"
+          {/* Utility Links - Desktop */}
+          <Box sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center', gap: 2, ml: 'auto' }}>
+            <IconButton
+              size="small"
               sx={{
-                color: isHomePage ? 'white' : 'inherit',
-                borderColor: isHomePage ? 'white' : 'inherit',
+                color: '#FFFFFF',
                 '&:hover': {
-                  bgcolor: isHomePage ? 'rgba(255,255,255,0.1)' : 'rgba(255,255,255,0.1)',
+                  bgcolor: 'rgba(255,255,255,0.1)',
                 },
               }}
             >
-              Se connecter
-            </Button>
-            <Button
-              component={RouterLink}
-              to="/register"
-              variant="contained"
+              <SearchIcon />
+            </IconButton>
+            
+            {!isAuthenticated ? (
+              <>
+                <Button
+                  component={RouterLink}
+                  to="/login"
+                  sx={{
+                    color: '#FFFFFF',
+                    fontWeight: 500,
+                    textTransform: 'none',
+                    '&:hover': {
+                      bgcolor: 'rgba(255,255,255,0.1)',
+                    },
+                  }}
+                >
+                  Se connecter
+                </Button>
+                <Button
+                  component={RouterLink}
+                  to="/register"
+                  variant="contained"
+                  sx={{
+                    bgcolor: '#C2185B', // Rose foncée
+                    color: 'white',
+                    fontWeight: 500,
+                    textTransform: 'none',
+                    px: 3,
+                    display: 'none', // Rendu invisible
+                    '&:hover': {
+                      bgcolor: '#880E4F',
+                    },
+                  }}
+                >
+                  CONTACTS BUSINESS
+                </Button>
+              </>
+            ) : (
+              <>
+                <IconButton
+                  size="large"
+                  edge="end"
+                  aria-label="compte"
+                  aria-controls="profile-menu"
+                  aria-haspopup="true"
+                  onClick={handleProfileMenuOpen}
+                  sx={{ color: '#FFFFFF' }}
+                >
+                  <Avatar sx={{ width: 32, height: 32, bgcolor: '#C2185B' }}>
+                    <AccountCircle />
+                  </Avatar>
+                </IconButton>
+              </>
+            )}
+            
+            <IconButton
+              size="small"
               sx={{
-                bgcolor: isHomePage ? 'white' : 'secondary.main',
-                color: isHomePage ? 'primary.main' : 'white',
+                color: '#FFFFFF',
+                display: 'none', // Rendu invisible
                 '&:hover': {
-                  bgcolor: isHomePage ? 'grey.100' : 'secondary.dark',
+                  bgcolor: 'rgba(255,255,255,0.1)',
                 },
               }}
             >
-              S'inscrire
-            </Button>
+              <LanguageIcon />
+            </IconButton>
+            <Typography variant="body2" sx={{ color: '#FFFFFF', fontSize: '0.875rem', display: 'none' }}>
+              Français
+            </Typography>
           </Box>
-        )}
 
-        {renderMobileMenu}
-        {renderProfileMenu}
-      </Toolbar>
+          {/* Mobile Menu */}
+          <Box sx={{ display: { xs: 'flex', md: 'none' }, ml: 'auto' }}>
+            <IconButton
+              size="large"
+              aria-label="menu"
+              aria-controls="mobile-menu"
+              aria-haspopup="true"
+              onClick={handleMobileMenuOpen}
+              sx={{ color: '#FFFFFF' }}
+            >
+              <MenuIcon />
+            </IconButton>
+          </Box>
+
+          {renderMobileMenu}
+          {renderProfileMenu}
+        </Toolbar>
+      </Container>
     </AppBar>
   );
 };
 
 export default Navbar;
-
-
-
-

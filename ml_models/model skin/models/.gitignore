@@ -1,0 +1,5 @@
+/modéle skinTwin2 .pt
+/modele_peau.pth
+/context_correction_xgb.joblib
+/Modelefusion_preproc.joblib
+/context_correction_label_encoder.joblib

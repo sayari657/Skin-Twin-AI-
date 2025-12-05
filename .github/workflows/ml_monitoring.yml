@@ -1,0 +1,35 @@
+name: ML Monitoring
+
+on:
+  schedule:
+    - cron: '0 */6 * * *'  # Toutes les 6 heures
+  workflow_dispatch:
+
+jobs:
+  monitor-models:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      
+      - name: Install dependencies
+        run: |
+          pip install -r mlops_requirements.txt
+      
+      - name: Run monitoring checks
+        run: |
+          python mlops/monitoring/model_monitor.py
+      
+      - name: Check for alerts
+        run: |
+          if [ -f .monitoring/alerts/*.json ]; then
+            echo "⚠️ Alerts detected!"
+            exit 1
+          fi
+

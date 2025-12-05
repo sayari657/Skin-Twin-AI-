@@ -1,0 +1,434 @@
+{
+  "presentation_title": "Skin-Twin-AI - Présentation Complète",
+  "created_at": "2025-11-30T12:25:50.220724",
+  "total_slides": 32,
+  "slides": [
+    {
+      "slide_number": 1,
+      "title": "Skin-Twin-AI",
+      "subtitle": "Intelligence Artificielle pour l'Analyse de la Peau",
+      "content": [
+        "Application intelligente d'analyse dermatologique",
+        "Recommandations personnalisées de soins",
+        "Powered by AI & Machine Learning"
+      ],
+      "slide_type": "title"
+    },
+    {
+      "slide_number": 2,
+      "title": "Introduction",
+      "content": [
+        "Skin-Twin-AI révolutionne les soins de la peau grâce à l'intelligence artificielle",
+        "Analyse précise de votre peau en quelques secondes",
+        "Recommandations personnalisées basées sur votre profil unique",
+        "Assistant IA conversationnel disponible 24/7"
+      ],
+      "slide_type": "content"
+    },
+    {
+      "slide_number": 3,
+      "title": "La Problématique",
+      "content": [
+        "Difficulté à identifier son type de peau précisément",
+        "Manque d'accès à des conseils dermatologiques professionnels",
+        "Surcharge d'informations contradictoires sur internet",
+        "Produits cosmétiques mal adaptés = résultats décevants",
+        "Coût élevé des consultations dermatologiques"
+      ],
+      "slide_type": "problem"
+    },
+    {
+      "slide_number": 4,
+      "title": "Notre Solution",
+      "content": [
+        "Analyse instantanée de la peau via photo",
+        "Détection automatique des problèmes cutanés",
+        "Recommandations de produits personnalisées",
+        "Assistant IA pour conseils en temps réel",
+        "Suivi de l'évolution de votre peau"
+      ],
+      "slide_type": "solution"
+    },
+    {
+      "slide_number": 5,
+      "title": "Vue d'Ensemble de l'Application",
+      "content": [
+        "Frontend React + TypeScript",
+        "Backend Django REST Framework",
+        "5 Modèles de Machine Learning intégrés",
+        "API IA conversationnelle (Groq/Gemini)",
+        "Système de recommandation intelligent",
+        "Dashboard avec statistiques"
+      ],
+      "slide_type": "overview"
+    },
+    {
+      "slide_number": 6,
+      "title": "Fonctionnalités Principales",
+      "content": [
+        "🤖 Assistant IA conversationnel avec Groq API",
+        "🎤 Reconnaissance vocale pour interagir avec le chat",
+        "📸 Analyse de peau via upload d'images",
+        "📊 Dashboard avec statistiques et graphiques",
+        "💬 Système de témoignages utilisateurs",
+        "🔐 Authentification JWT sécurisée"
+      ],
+      "slide_type": "features"
+    },
+    {
+      "slide_number": 7,
+      "title": "Analyse de Peau Avancée",
+      "content": [
+        "Classification du type de peau (Sèche, Normale, Grasse)",
+        "Détection de l'acné avec niveau de sévérité",
+        "Identification des rides et signes de vieillissement",
+        "Détection des taches sombres et hyperpigmentation",
+        "Analyse des rougeurs et irritations",
+        "Image annotée avec zones détectées"
+      ],
+      "slide_type": "feature_detail"
+    },
+    {
+      "slide_number": 8,
+      "title": "Modèles de Machine Learning",
+      "content": [
+        "CNN (Convolutional Neural Network) pour classification du type de peau",
+        "YOLOv8 pour détection d'objets (acné, rides, taches)",
+        "Modèles de segmentation pour zones précises",
+        "5 modèles intégrés fonctionnant en parallèle",
+        "Précision élevée grâce à l'entraînement sur grandes bases de données"
+      ],
+      "slide_type": "ml_models"
+    },
+    {
+      "slide_number": 9,
+      "title": "Architecture Frontend",
+      "content": [
+        "React 18+ avec TypeScript",
+        "Material-UI (MUI) pour l'interface moderne",
+        "React Router pour la navigation",
+        "Axios pour les appels API",
+        "Web Speech API pour la reconnaissance vocale",
+        "Design responsive et mobile-first"
+      ],
+      "slide_type": "architecture"
+    },
+    {
+      "slide_number": 10,
+      "title": "Architecture Backend",
+      "content": [
+        "Django 5.2.6 + Django REST Framework",
+        "SQLite pour le développement",
+        "MySQL pour la production",
+        "JWT Authentication pour la sécurité",
+        "Architecture modulaire (chat_ai, detection, users, products)",
+        "API RESTful complète"
+      ],
+      "slide_type": "architecture"
+    },
+    {
+      "slide_number": 11,
+      "title": "Assistant IA Conversationnel",
+      "content": [
+        "Intégration avec Groq API (Llama 3.1)",
+        "Support pour Gemini AI et Ollama",
+        "Contexte utilisateur intégré (âge, type de peau, historique)",
+        "Recommandations de routines personnalisées",
+        "Explications détaillées des ingrédients",
+        "Réponses en français naturel et professionnel"
+      ],
+      "slide_type": "ai_chat"
+    },
+    {
+      "slide_number": 12,
+      "title": "Système de Recommandation Intelligent",
+      "content": [
+        "Algorithme de scoring multi-critères",
+        "Matching basé sur le type de peau détecté",
+        "Adaptation aux problèmes cutanés identifiés",
+        "Diversification des sources de produits",
+        "Score de confiance pour chaque recommandation",
+        "Base de données de produits scrapés automatiquement"
+      ],
+      "slide_type": "recommendation"
+    },
+    {
+      "slide_number": 13,
+      "title": "Technologies Machine Learning",
+      "content": [
+        "PyTorch 2.0+ pour les modèles CNN",
+        "Ultralytics YOLOv8 pour la détection",
+        "OpenCV pour le traitement d'images",
+        "scikit-learn pour le preprocessing",
+        "XGBoost pour les modèles de scoring",
+        "TensorFlow pour les modèles GAN"
+      ],
+      "slide_type": "tech_stack"
+    },
+    {
+      "slide_number": 14,
+      "title": "MLOps et Infrastructure",
+      "content": [
+        "MLflow pour le Model Registry",
+        "Monitoring en production",
+        "Pipelines de training automatisés",
+        "Détection de dérive des données",
+        "Versioning des données avec DVC",
+        "CI/CD avec GitHub Actions"
+      ],
+      "slide_type": "mlops"
+    },
+    {
+      "slide_number": 15,
+      "title": "Sécurité et Authentification",
+      "content": [
+        "JWT (JSON Web Tokens) pour l'authentification",
+        "Chiffrement des données sensibles",
+        "Validation des uploads d'images",
+        "Protection CSRF intégrée",
+        "Gestion sécurisée des clés API",
+        "Conformité RGPD"
+      ],
+      "slide_type": "security"
+    },
+    {
+      "slide_number": 16,
+      "title": "Dashboard Utilisateur",
+      "content": [
+        "Historique complet des analyses",
+        "Graphiques d'évolution de la peau",
+        "Statistiques de suivi",
+        "Comparaison avant/après",
+        "Métriques de confiance des prédictions",
+        "Visualisation des recommandations"
+      ],
+      "slide_type": "dashboard"
+    },
+    {
+      "slide_number": 17,
+      "title": "Cas d'Usage: Traitement de l'Acné",
+      "content": [
+        "Détection automatique de l'acné et sévérité",
+        "Recommandation de produits avec acide salicylique",
+        "Routine personnalisée matin/soir",
+        "Suivi de l'évolution sur plusieurs semaines",
+        "Conseils adaptés selon le type de peau",
+        "Prévention des cicatrices"
+      ],
+      "slide_type": "use_case"
+    },
+    {
+      "slide_number": 18,
+      "title": "Cas d'Usage: Soins Anti-âge",
+      "content": [
+        "Détection des rides et signes de vieillissement",
+        "Recommandation de produits avec rétinol",
+        "Routine avec vitamine C le matin",
+        "Protection solaire quotidienne",
+        "Suivi de l'amélioration de la texture",
+        "Conseils adaptés à l'âge"
+      ],
+      "slide_type": "use_case"
+    },
+    {
+      "slide_number": 19,
+      "title": "Cas d'Usage: Taches Pigmentaires",
+      "content": [
+        "Détection de l'hyperpigmentation",
+        "Recommandation de produits éclaircissants",
+        "Routine avec acide azélaïque et niacinamide",
+        "Importance de la protection solaire",
+        "Suivi de la réduction des taches",
+        "Prévention de nouvelles taches"
+      ],
+      "slide_type": "use_case"
+    },
+    {
+      "slide_number": 20,
+      "title": "Interface Utilisateur Moderne",
+      "content": [
+        "Design épuré et intuitif",
+        "Thème médical professionnel",
+        "Navigation fluide entre les sections",
+        "Upload d'images par glisser-déposer",
+        "Chat en temps réel avec l'IA",
+        "Visualisations interactives"
+      ],
+      "slide_type": "ui"
+    },
+    {
+      "slide_number": 21,
+      "title": "Base de Données de Produits",
+      "content": [
+        "Scraping automatique de sites e-commerce",
+        "Plus de 1000 produits référencés",
+        "Informations détaillées (ingrédients, prix, taille)",
+        "Catégorisation intelligente",
+        "Mise à jour régulière automatique",
+        "Filtrage par type de peau et problèmes"
+      ],
+      "slide_type": "products"
+    },
+    {
+      "slide_number": 22,
+      "title": "Performance et Scalabilité",
+      "content": [
+        "Temps d'analyse < 5 secondes",
+        "Optimisation des modèles ML",
+        "Cache des résultats fréquents",
+        "Architecture modulaire et extensible",
+        "Support Docker pour déploiement",
+        "Prêt pour la production"
+      ],
+      "slide_type": "performance"
+    },
+    {
+      "slide_number": 23,
+      "title": "Déploiement avec Docker",
+      "content": [
+        "Docker Compose pour orchestration",
+        "Conteneurs séparés frontend/backend",
+        "Configuration d'environnement simplifiée",
+        "Scripts de démarrage automatique",
+        "Documentation complète",
+        "Export et partage facilités"
+      ],
+      "slide_type": "deployment"
+    },
+    {
+      "slide_number": 24,
+      "title": "API REST Endpoints",
+      "content": [
+        "/api/auth/ - Authentification",
+        "/api/detection/analyze/ - Analyse de peau",
+        "/api/chat/ - Assistant IA",
+        "/api/recommendations/ - Recommandations",
+        "/api/products/ - Gestion produits",
+        "/api/users/ - Profil utilisateur"
+      ],
+      "slide_type": "api"
+    },
+    {
+      "slide_number": 25,
+      "title": "Tests et Assurance Qualité",
+      "content": [
+        "Tests unitaires avec pytest",
+        "Tests d'intégration Django",
+        "Validation des modèles ML",
+        "Tests de performance",
+        "Validation des données utilisateur",
+        "Monitoring des erreurs en production"
+      ],
+      "slide_type": "testing"
+    },
+    {
+      "slide_number": 26,
+      "title": "Statistiques et Métriques",
+      "content": [
+        "Suivi du nombre d'analyses effectuées",
+        "Taux de précision des prédictions",
+        "Temps moyen de traitement",
+        "Satisfaction utilisateur",
+        "Taux de conversion des recommandations",
+        "Performance des modèles ML"
+      ],
+      "slide_type": "stats"
+    },
+    {
+      "slide_number": 27,
+      "title": "Roadmap Future",
+      "content": [
+        "Application mobile iOS/Android",
+        "Intégration de plus de modèles ML",
+        "Reconnaissance faciale avancée",
+        "Partage social des résultats",
+        "Programme de fidélité",
+        "Partenariats avec marques cosmétiques"
+      ],
+      "slide_type": "roadmap"
+    },
+    {
+      "slide_number": 28,
+      "title": "Avantages Concurrentiels",
+      "content": [
+        "5 modèles ML intégrés (vs 1-2 pour concurrents)",
+        "Assistant IA conversationnel avancé",
+        "Recommandations ultra-personnalisées",
+        "Interface moderne et intuitive",
+        "Gratuit et accessible à tous",
+        "Open source et extensible"
+      ],
+      "slide_type": "competitive"
+    },
+    {
+      "slide_number": 29,
+      "title": "Impact et Bénéfices",
+      "content": [
+        "Démocratisation des soins dermatologiques",
+        "Économies pour les utilisateurs",
+        "Meilleure compréhension de sa peau",
+        "Choix de produits plus éclairés",
+        "Prévention des problèmes cutanés",
+        "Amélioration de la confiance en soi"
+      ],
+      "slide_type": "impact"
+    },
+    {
+      "slide_number": 30,
+      "title": "Conclusion",
+      "content": [
+        "Skin-Twin-AI combine IA et dermatologie",
+        "Solution complète et accessible",
+        "Technologie de pointe au service de tous",
+        "Évolution continue grâce au feedback utilisateurs",
+        "Rejoignez la révolution des soins de la peau intelligents"
+      ],
+      "slide_type": "conclusion"
+    },
+    {
+      "slide_number": 31,
+      "title": "Remerciements",
+      "content": [
+        "Groq pour l'API IA",
+        "Material-UI pour les composants",
+        "Django et React communities",
+        "Ultralytics pour YOLOv8",
+        "Tous les contributeurs open source",
+        "Merci de votre attention !"
+      ],
+      "slide_type": "thanks"
+    },
+    {
+      "slide_number": 32,
+      "title": "Contact et Ressources",
+      "content": [
+        "GitHub: github.com/skin-twin-ai",
+        "Documentation complète disponible",
+        "Guide de démarrage rapide",
+        "Support technique disponible",
+        "Développé par Mohamed Sayari",
+        "Licence MIT"
+      ],
+      "slide_type": "contact"
+    }
+  ],
+  "instructions": {
+    "how_to_use": [
+      "1. Ouvrez Canva et créez une nouvelle présentation",
+      "2. Pour chaque slide dans le JSON:",
+      "   - Créez une nouvelle slide dans Canva",
+      "   - Utilisez le titre comme titre principal",
+      "   - Ajoutez les éléments de 'content' comme puces",
+      "   - Adaptez le design selon le 'slide_type'",
+      "3. Utilisez un thème médical/professionnel",
+      "4. Ajoutez des images pertinentes pour chaque section"
+    ],
+    "design_tips": [
+      "Utilisez des couleurs douces (bleu, vert menthe, blanc)",
+      "Police claire et lisible (Montserrat, Open Sans)",
+      "Ajoutez des icônes pour chaque fonctionnalité",
+      "Utilisez des graphiques pour les statistiques",
+      "Incluez des captures d'écran de l'application"
+    ]
+  }
+}

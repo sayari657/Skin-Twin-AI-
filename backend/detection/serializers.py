@@ -8,7 +8,7 @@ class SkinAnalysisSerializer(serializers.ModelSerializer):
     class Meta:
         model = SkinAnalysis
         fields = [
-            'id', 'image', 'skin_type_prediction', 'skin_type_confidence',
+            'id', 'image', 'annotated_image', 'skin_type_prediction', 'skin_type_confidence',
             'acne_detected', 'acne_severity', 'acne_confidence',
             'wrinkles_detected', 'wrinkles_severity', 'wrinkles_confidence',
             'dark_spots_detected', 'dark_spots_severity', 'dark_spots_confidence',

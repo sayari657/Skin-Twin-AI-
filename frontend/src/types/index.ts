@@ -10,7 +10,7 @@ export interface User {
   gender?: 'M' | 'F' | 'O';
   location_country?: string;
   location_region?: string;
-  skin_type?: 'DRY' | 'OILY' | 'COMBINATION' | 'NORMAL' | 'SENSITIVE';
+  skin_type?: 'DRY' | 'OILY' | 'COMBINATION' | 'NORMAL' | 'SENSITIVE' | 'UNKNOWN';
   diabetes: boolean;
   hypertension: boolean;
   blood_disorders: boolean;
@@ -22,7 +22,10 @@ export interface User {
   hydration?: 'LOW' | 'MODERATE' | 'HIGH';
   smoking: boolean;
   alcohol: boolean;
-  sleep_hours?: 'LOW' | 'MODERATE' | 'HIGH';
+  sleep_hours?: number;
+  stress_level?: number;
+  diet_quality?: 'POOR' | 'AVERAGE' | 'GOOD' | 'EXCELLENT';
+  alcohol_consumption?: 'NONE' | 'OCCASIONAL' | 'MODERATE' | 'HIGH';
   family_dermatological_history: boolean;
   current_skin_problems: string[];
   current_treatments: string;
@@ -37,6 +40,7 @@ export interface User {
 export interface SkinAnalysis {
   id: number;
   image: string;
+  annotated_image?: string;
   skin_type_prediction?: string;
   skin_type_confidence?: number;
   acne_detected: boolean;
@@ -63,15 +67,17 @@ export interface Product {
   brand: string;
   category: 'CLEANSER' | 'MOISTURIZER' | 'SERUM' | 'SUNSCREEN' | 'TREATMENT' | 'MASK' | 'TONER' | 'EXFOLIANT';
   description: string;
-  ingredients: string;
+  ingredients?: string;
   price?: number;
   size?: string;
   target_skin_types: string[];
   target_issues: string[];
   image?: string;
-  created_at: string;
-  updated_at: string;
-  is_active: boolean;
+  url?: string;  // URL du produit (pour les produits scrapés)
+  source_site?: string;  // Site source (pour les produits scrapés)
+  created_at?: string;
+  updated_at?: string;
+  is_active?: boolean;
 }
 
 export interface Recommendation {
@@ -116,7 +122,7 @@ export interface RegisterRequest {
   gender?: 'M' | 'F' | 'O';
   location_country?: string;
   location_region?: string;
-  skin_type?: 'DRY' | 'OILY' | 'COMBINATION' | 'NORMAL' | 'SENSITIVE';
+  skin_type?: 'DRY' | 'OILY' | 'COMBINATION' | 'NORMAL' | 'SENSITIVE' | 'UNKNOWN';
   diabetes?: boolean;
   hypertension?: boolean;
   blood_disorders?: boolean;
@@ -128,7 +134,10 @@ export interface RegisterRequest {
   hydration?: 'LOW' | 'MODERATE' | 'HIGH';
   smoking?: boolean;
   alcohol?: boolean;
-  sleep_hours?: 'LOW' | 'MODERATE' | 'HIGH';
+  sleep_hours?: number;
+  stress_level?: number;
+  diet_quality?: 'POOR' | 'AVERAGE' | 'GOOD' | 'EXCELLENT';
+  alcohol_consumption?: 'NONE' | 'OCCASIONAL' | 'MODERATE' | 'HIGH';
   family_dermatological_history?: boolean;
   current_skin_problems?: string[];
   current_treatments?: string;

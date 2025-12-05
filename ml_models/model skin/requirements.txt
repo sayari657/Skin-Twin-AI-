@@ -1,0 +1,30 @@
+# Requirements pour le système de diagnostic dermatologique
+# Installation: pip install -r requirements.txt
+
+# Deep Learning
+torch>=2.0.0
+torchvision>=0.15.0
+ultralytics>=8.0.0
+
+# Machine Learning
+scikit-learn>=1.2.0
+xgboost>=2.0.0
+joblib>=1.2.0
+
+# Image Processing
+opencv-python>=4.7.0
+Pillow>=9.5.0
+
+# Data Processing
+numpy>=1.24.0
+pandas>=2.0.0
+
+# Visualization (optionnel)
+matplotlib>=3.7.0
+
+# Streamlit (si vous utilisez l'interface web)
+streamlit>=1.25.0
+
+# API Groq (pour les rapports humanisés - optionnel)
+groq>=0.3.0
+

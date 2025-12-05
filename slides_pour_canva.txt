@@ -1,0 +1,835 @@
+================================================================================
+PRÉSENTATION SKIN-TWIN-AI - CONTENU POUR CANVA
+================================================================================
+
+Nombre total de slides: 32
+
+================================================================================
+
+
+
+================================================================================
+SLIDE 1: Skin-Twin-AI
+================================================================================
+
+Type: TITLE
+
+SOUS-TITRE:
+Intelligence Artificielle pour l'Analyse de la Peau
+
+CONTENU (copier chaque ligne):
+--------------------------------------------------------------------------------
+1. Application intelligente d'analyse dermatologique
+2. Recommandations personnalisées de soins
+3. Powered by AI & Machine Learning
+--------------------------------------------------------------------------------
+
+
+INSTRUCTIONS POUR CANVA:
+1. Créez une nouvelle slide dans Canva
+2. Ajoutez le titre ci-dessus
+3. Ajoutez le sous-titre
+4. Ajoutez les 3 points de contenu comme puces
+5. Personnalisez le design selon vos préférences
+
+================================================================================
+
+
+================================================================================
+SLIDE 2: Introduction
+================================================================================
+
+Type: CONTENT
+
+CONTENU (copier chaque ligne):
+--------------------------------------------------------------------------------
+1. Skin-Twin-AI révolutionne les soins de la peau grâce à l'intelligence artificielle
+2. Analyse précise de votre peau en quelques secondes
+3. Recommandations personnalisées basées sur votre profil unique
+4. Assistant IA conversationnel disponible 24/7
+--------------------------------------------------------------------------------
+
+
+INSTRUCTIONS POUR CANVA:
+1. Créez une nouvelle slide dans Canva
+2. Ajoutez le titre ci-dessus
+4. Ajoutez les 4 points de contenu comme puces
+5. Personnalisez le design selon vos préférences
+
+================================================================================
+
+
+================================================================================
+SLIDE 3: La Problématique
+================================================================================
+
+Type: PROBLEM
+
+CONTENU (copier chaque ligne):
+--------------------------------------------------------------------------------
+1. Difficulté à identifier son type de peau précisément
+2. Manque d'accès à des conseils dermatologiques professionnels
+3. Surcharge d'informations contradictoires sur internet
+4. Produits cosmétiques mal adaptés = résultats décevants
+5. Coût élevé des consultations dermatologiques
+--------------------------------------------------------------------------------
+
+
+INSTRUCTIONS POUR CANVA:
+1. Créez une nouvelle slide dans Canva
+2. Ajoutez le titre ci-dessus
+4. Ajoutez les 5 points de contenu comme puces
+5. Personnalisez le design selon vos préférences
+
+================================================================================
+
+
+================================================================================
+SLIDE 4: Notre Solution
+================================================================================
+
+Type: SOLUTION
+
+CONTENU (copier chaque ligne):
+--------------------------------------------------------------------------------
+1. Analyse instantanée de la peau via photo
+2. Détection automatique des problèmes cutanés
+3. Recommandations de produits personnalisées
+4. Assistant IA pour conseils en temps réel
+5. Suivi de l'évolution de votre peau
+--------------------------------------------------------------------------------
+
+
+INSTRUCTIONS POUR CANVA:
+1. Créez une nouvelle slide dans Canva
+2. Ajoutez le titre ci-dessus
+4. Ajoutez les 5 points de contenu comme puces
+5. Personnalisez le design selon vos préférences
+
+================================================================================
+
+
+================================================================================
+SLIDE 5: Vue d'Ensemble de l'Application
+================================================================================
+
+Type: OVERVIEW
+
+CONTENU (copier chaque ligne):
+--------------------------------------------------------------------------------
+1. Frontend React + TypeScript
+2. Backend Django REST Framework
+3. 5 Modèles de Machine Learning intégrés
+4. API IA conversationnelle (Groq/Gemini)
+5. Système de recommandation intelligent
+6. Dashboard avec statistiques
+--------------------------------------------------------------------------------
+
+
+INSTRUCTIONS POUR CANVA:
+1. Créez une nouvelle slide dans Canva
+2. Ajoutez le titre ci-dessus
+4. Ajoutez les 6 points de contenu comme puces
+5. Personnalisez le design selon vos préférences
+
+================================================================================
+
+
+================================================================================
+SLIDE 6: Fonctionnalités Principales
+================================================================================
+
+Type: FEATURES
+
+CONTENU (copier chaque ligne):
+--------------------------------------------------------------------------------
+1. 🤖 Assistant IA conversationnel avec Groq API
+2. 🎤 Reconnaissance vocale pour interagir avec le chat
+3. 📸 Analyse de peau via upload d'images
+4. 📊 Dashboard avec statistiques et graphiques
+5. 💬 Système de témoignages utilisateurs
+6. 🔐 Authentification JWT sécurisée
+--------------------------------------------------------------------------------
+
+
+INSTRUCTIONS POUR CANVA:
+1. Créez une nouvelle slide dans Canva
+2. Ajoutez le titre ci-dessus
+4. Ajoutez les 6 points de contenu comme puces
+5. Personnalisez le design selon vos préférences
+
+================================================================================
+
+
+================================================================================
+SLIDE 7: Analyse de Peau Avancée
+================================================================================
+
+Type: FEATURE_DETAIL
+
+CONTENU (copier chaque ligne):
+--------------------------------------------------------------------------------
+1. Classification du type de peau (Sèche, Normale, Grasse)
+2. Détection de l'acné avec niveau de sévérité
+3. Identification des rides et signes de vieillissement
+4. Détection des taches sombres et hyperpigmentation
+5. Analyse des rougeurs et irritations
+6. Image annotée avec zones détectées
+--------------------------------------------------------------------------------
+
+
+INSTRUCTIONS POUR CANVA:
+1. Créez une nouvelle slide dans Canva
+2. Ajoutez le titre ci-dessus
+4. Ajoutez les 6 points de contenu comme puces
+5. Personnalisez le design selon vos préférences
+
+================================================================================
+
+
+================================================================================
+SLIDE 8: Modèles de Machine Learning
+================================================================================
+
+Type: ML_MODELS
+
+CONTENU (copier chaque ligne):
+--------------------------------------------------------------------------------
+1. CNN (Convolutional Neural Network) pour classification du type de peau
+2. YOLOv8 pour détection d'objets (acné, rides, taches)
+3. Modèles de segmentation pour zones précises
+4. 5 modèles intégrés fonctionnant en parallèle
+5. Précision élevée grâce à l'entraînement sur grandes bases de données
+--------------------------------------------------------------------------------
+
+
+INSTRUCTIONS POUR CANVA:
+1. Créez une nouvelle slide dans Canva
+2. Ajoutez le titre ci-dessus
+4. Ajoutez les 5 points de contenu comme puces
+5. Personnalisez le design selon vos préférences
+
+================================================================================
+
+
+================================================================================
+SLIDE 9: Architecture Frontend
+================================================================================
+
+Type: ARCHITECTURE
+
+CONTENU (copier chaque ligne):
+--------------------------------------------------------------------------------
+1. React 18+ avec TypeScript
+2. Material-UI (MUI) pour l'interface moderne
+3. React Router pour la navigation
+4. Axios pour les appels API
+5. Web Speech API pour la reconnaissance vocale
+6. Design responsive et mobile-first
+--------------------------------------------------------------------------------
+
+
+INSTRUCTIONS POUR CANVA:
+1. Créez une nouvelle slide dans Canva
+2. Ajoutez le titre ci-dessus
+4. Ajoutez les 6 points de contenu comme puces
+5. Personnalisez le design selon vos préférences
+
+================================================================================
+
+
+================================================================================
+SLIDE 10: Architecture Backend
+================================================================================
+
+Type: ARCHITECTURE
+
+CONTENU (copier chaque ligne):
+--------------------------------------------------------------------------------
+1. Django 5.2.6 + Django REST Framework
+2. SQLite pour le développement
+3. MySQL pour la production
+4. JWT Authentication pour la sécurité
+5. Architecture modulaire (chat_ai, detection, users, products)
+6. API RESTful complète
+--------------------------------------------------------------------------------
+
+
+INSTRUCTIONS POUR CANVA:
+1. Créez une nouvelle slide dans Canva
+2. Ajoutez le titre ci-dessus
+4. Ajoutez les 6 points de contenu comme puces
+5. Personnalisez le design selon vos préférences
+
+================================================================================
+
+
+================================================================================
+SLIDE 11: Assistant IA Conversationnel
+================================================================================
+
+Type: AI_CHAT
+
+CONTENU (copier chaque ligne):
+--------------------------------------------------------------------------------
+1. Intégration avec Groq API (Llama 3.1)
+2. Support pour Gemini AI et Ollama
+3. Contexte utilisateur intégré (âge, type de peau, historique)
+4. Recommandations de routines personnalisées
+5. Explications détaillées des ingrédients
+6. Réponses en français naturel et professionnel
+--------------------------------------------------------------------------------
+
+
+INSTRUCTIONS POUR CANVA:
+1. Créez une nouvelle slide dans Canva
+2. Ajoutez le titre ci-dessus
+4. Ajoutez les 6 points de contenu comme puces
+5. Personnalisez le design selon vos préférences
+
+================================================================================
+
+
+================================================================================
+SLIDE 12: Système de Recommandation Intelligent
+================================================================================
+
+Type: RECOMMENDATION
+
+CONTENU (copier chaque ligne):
+--------------------------------------------------------------------------------
+1. Algorithme de scoring multi-critères
+2. Matching basé sur le type de peau détecté
+3. Adaptation aux problèmes cutanés identifiés
+4. Diversification des sources de produits
+5. Score de confiance pour chaque recommandation
+6. Base de données de produits scrapés automatiquement
+--------------------------------------------------------------------------------
+
+
+INSTRUCTIONS POUR CANVA:
+1. Créez une nouvelle slide dans Canva
+2. Ajoutez le titre ci-dessus
+4. Ajoutez les 6 points de contenu comme puces
+5. Personnalisez le design selon vos préférences
+
+================================================================================
+
+
+================================================================================
+SLIDE 13: Technologies Machine Learning
+================================================================================
+
+Type: TECH_STACK
+
+CONTENU (copier chaque ligne):
+--------------------------------------------------------------------------------
+1. PyTorch 2.0+ pour les modèles CNN
+2. Ultralytics YOLOv8 pour la détection
+3. OpenCV pour le traitement d'images
+4. scikit-learn pour le preprocessing
+5. XGBoost pour les modèles de scoring
+6. TensorFlow pour les modèles GAN
+--------------------------------------------------------------------------------
+
+
+INSTRUCTIONS POUR CANVA:
+1. Créez une nouvelle slide dans Canva
+2. Ajoutez le titre ci-dessus
+4. Ajoutez les 6 points de contenu comme puces
+5. Personnalisez le design selon vos préférences
+
+================================================================================
+
+
+================================================================================
+SLIDE 14: MLOps et Infrastructure
+================================================================================
+
+Type: MLOPS
+
+CONTENU (copier chaque ligne):
+--------------------------------------------------------------------------------
+1. MLflow pour le Model Registry
+2. Monitoring en production
+3. Pipelines de training automatisés
+4. Détection de dérive des données
+5. Versioning des données avec DVC
+6. CI/CD avec GitHub Actions
+--------------------------------------------------------------------------------
+
+
+INSTRUCTIONS POUR CANVA:
+1. Créez une nouvelle slide dans Canva
+2. Ajoutez le titre ci-dessus
+4. Ajoutez les 6 points de contenu comme puces
+5. Personnalisez le design selon vos préférences
+
+================================================================================
+
+
+================================================================================
+SLIDE 15: Sécurité et Authentification
+================================================================================
+
+Type: SECURITY
+
+CONTENU (copier chaque ligne):
+--------------------------------------------------------------------------------
+1. JWT (JSON Web Tokens) pour l'authentification
+2. Chiffrement des données sensibles
+3. Validation des uploads d'images
+4. Protection CSRF intégrée
+5. Gestion sécurisée des clés API
+6. Conformité RGPD
+--------------------------------------------------------------------------------
+
+
+INSTRUCTIONS POUR CANVA:
+1. Créez une nouvelle slide dans Canva
+2. Ajoutez le titre ci-dessus
+4. Ajoutez les 6 points de contenu comme puces
+5. Personnalisez le design selon vos préférences
+
+================================================================================
+
+
+================================================================================
+SLIDE 16: Dashboard Utilisateur
+================================================================================
+
+Type: DASHBOARD
+
+CONTENU (copier chaque ligne):
+--------------------------------------------------------------------------------
+1. Historique complet des analyses
+2. Graphiques d'évolution de la peau
+3. Statistiques de suivi
+4. Comparaison avant/après
+5. Métriques de confiance des prédictions
+6. Visualisation des recommandations
+--------------------------------------------------------------------------------
+
+
+INSTRUCTIONS POUR CANVA:
+1. Créez une nouvelle slide dans Canva
+2. Ajoutez le titre ci-dessus
+4. Ajoutez les 6 points de contenu comme puces
+5. Personnalisez le design selon vos préférences
+
+================================================================================
+
+
+================================================================================
+SLIDE 17: Cas d'Usage: Traitement de l'Acné
+================================================================================
+
+Type: USE_CASE
+
+CONTENU (copier chaque ligne):
+--------------------------------------------------------------------------------
+1. Détection automatique de l'acné et sévérité
+2. Recommandation de produits avec acide salicylique
+3. Routine personnalisée matin/soir
+4. Suivi de l'évolution sur plusieurs semaines
+5. Conseils adaptés selon le type de peau
+6. Prévention des cicatrices
+--------------------------------------------------------------------------------
+
+
+INSTRUCTIONS POUR CANVA:
+1. Créez une nouvelle slide dans Canva
+2. Ajoutez le titre ci-dessus
+4. Ajoutez les 6 points de contenu comme puces
+5. Personnalisez le design selon vos préférences
+
+================================================================================
+
+
+================================================================================
+SLIDE 18: Cas d'Usage: Soins Anti-âge
+================================================================================
+
+Type: USE_CASE
+
+CONTENU (copier chaque ligne):
+--------------------------------------------------------------------------------
+1. Détection des rides et signes de vieillissement
+2. Recommandation de produits avec rétinol
+3. Routine avec vitamine C le matin
+4. Protection solaire quotidienne
+5. Suivi de l'amélioration de la texture
+6. Conseils adaptés à l'âge
+--------------------------------------------------------------------------------
+
+
+INSTRUCTIONS POUR CANVA:
+1. Créez une nouvelle slide dans Canva
+2. Ajoutez le titre ci-dessus
+4. Ajoutez les 6 points de contenu comme puces
+5. Personnalisez le design selon vos préférences
+
+================================================================================
+
+
+================================================================================
+SLIDE 19: Cas d'Usage: Taches Pigmentaires
+================================================================================
+
+Type: USE_CASE
+
+CONTENU (copier chaque ligne):
+--------------------------------------------------------------------------------
+1. Détection de l'hyperpigmentation
+2. Recommandation de produits éclaircissants
+3. Routine avec acide azélaïque et niacinamide
+4. Importance de la protection solaire
+5. Suivi de la réduction des taches
+6. Prévention de nouvelles taches
+--------------------------------------------------------------------------------
+
+
+INSTRUCTIONS POUR CANVA:
+1. Créez une nouvelle slide dans Canva
+2. Ajoutez le titre ci-dessus
+4. Ajoutez les 6 points de contenu comme puces
+5. Personnalisez le design selon vos préférences
+
+================================================================================
+
+
+================================================================================
+SLIDE 20: Interface Utilisateur Moderne
+================================================================================
+
+Type: UI
+
+CONTENU (copier chaque ligne):
+--------------------------------------------------------------------------------
+1. Design épuré et intuitif
+2. Thème médical professionnel
+3. Navigation fluide entre les sections
+4. Upload d'images par glisser-déposer
+5. Chat en temps réel avec l'IA
+6. Visualisations interactives
+--------------------------------------------------------------------------------
+
+
+INSTRUCTIONS POUR CANVA:
+1. Créez une nouvelle slide dans Canva
+2. Ajoutez le titre ci-dessus
+4. Ajoutez les 6 points de contenu comme puces
+5. Personnalisez le design selon vos préférences
+
+================================================================================
+
+
+================================================================================
+SLIDE 21: Base de Données de Produits
+================================================================================
+
+Type: PRODUCTS
+
+CONTENU (copier chaque ligne):
+--------------------------------------------------------------------------------
+1. Scraping automatique de sites e-commerce
+2. Plus de 1000 produits référencés
+3. Informations détaillées (ingrédients, prix, taille)
+4. Catégorisation intelligente
+5. Mise à jour régulière automatique
+6. Filtrage par type de peau et problèmes
+--------------------------------------------------------------------------------
+
+
+INSTRUCTIONS POUR CANVA:
+1. Créez une nouvelle slide dans Canva
+2. Ajoutez le titre ci-dessus
+4. Ajoutez les 6 points de contenu comme puces
+5. Personnalisez le design selon vos préférences
+
+================================================================================
+
+
+================================================================================
+SLIDE 22: Performance et Scalabilité
+================================================================================
+
+Type: PERFORMANCE
+
+CONTENU (copier chaque ligne):
+--------------------------------------------------------------------------------
+1. Temps d'analyse < 5 secondes
+2. Optimisation des modèles ML
+3. Cache des résultats fréquents
+4. Architecture modulaire et extensible
+5. Support Docker pour déploiement
+6. Prêt pour la production
+--------------------------------------------------------------------------------
+
+
+INSTRUCTIONS POUR CANVA:
+1. Créez une nouvelle slide dans Canva
+2. Ajoutez le titre ci-dessus
+4. Ajoutez les 6 points de contenu comme puces
+5. Personnalisez le design selon vos préférences
+
+================================================================================
+
+
+================================================================================
+SLIDE 23: Déploiement avec Docker
+================================================================================
+
+Type: DEPLOYMENT
+
+CONTENU (copier chaque ligne):
+--------------------------------------------------------------------------------
+1. Docker Compose pour orchestration
+2. Conteneurs séparés frontend/backend
+3. Configuration d'environnement simplifiée
+4. Scripts de démarrage automatique
+5. Documentation complète
+6. Export et partage facilités
+--------------------------------------------------------------------------------
+
+
+INSTRUCTIONS POUR CANVA:
+1. Créez une nouvelle slide dans Canva
+2. Ajoutez le titre ci-dessus
+4. Ajoutez les 6 points de contenu comme puces
+5. Personnalisez le design selon vos préférences
+
+================================================================================
+
+
+================================================================================
+SLIDE 24: API REST Endpoints
+================================================================================
+
+Type: API
+
+CONTENU (copier chaque ligne):
+--------------------------------------------------------------------------------
+1. /api/auth/ - Authentification
+2. /api/detection/analyze/ - Analyse de peau
+3. /api/chat/ - Assistant IA
+4. /api/recommendations/ - Recommandations
+5. /api/products/ - Gestion produits
+6. /api/users/ - Profil utilisateur
+--------------------------------------------------------------------------------
+
+
+INSTRUCTIONS POUR CANVA:
+1. Créez une nouvelle slide dans Canva
+2. Ajoutez le titre ci-dessus
+4. Ajoutez les 6 points de contenu comme puces
+5. Personnalisez le design selon vos préférences
+
+================================================================================
+
+
+================================================================================
+SLIDE 25: Tests et Assurance Qualité
+================================================================================
+
+Type: TESTING
+
+CONTENU (copier chaque ligne):
+--------------------------------------------------------------------------------
+1. Tests unitaires avec pytest
+2. Tests d'intégration Django
+3. Validation des modèles ML
+4. Tests de performance
+5. Validation des données utilisateur
+6. Monitoring des erreurs en production
+--------------------------------------------------------------------------------
+
+
+INSTRUCTIONS POUR CANVA:
+1. Créez une nouvelle slide dans Canva
+2. Ajoutez le titre ci-dessus
+4. Ajoutez les 6 points de contenu comme puces
+5. Personnalisez le design selon vos préférences
+
+================================================================================
+
+
+================================================================================
+SLIDE 26: Statistiques et Métriques
+================================================================================
+
+Type: STATS
+
+CONTENU (copier chaque ligne):
+--------------------------------------------------------------------------------
+1. Suivi du nombre d'analyses effectuées
+2. Taux de précision des prédictions
+3. Temps moyen de traitement
+4. Satisfaction utilisateur
+5. Taux de conversion des recommandations
+6. Performance des modèles ML
+--------------------------------------------------------------------------------
+
+
+INSTRUCTIONS POUR CANVA:
+1. Créez une nouvelle slide dans Canva
+2. Ajoutez le titre ci-dessus
+4. Ajoutez les 6 points de contenu comme puces
+5. Personnalisez le design selon vos préférences
+
+================================================================================
+
+
+================================================================================
+SLIDE 27: Roadmap Future
+================================================================================
+
+Type: ROADMAP
+
+CONTENU (copier chaque ligne):
+--------------------------------------------------------------------------------
+1. Application mobile iOS/Android
+2. Intégration de plus de modèles ML
+3. Reconnaissance faciale avancée
+4. Partage social des résultats
+5. Programme de fidélité
+6. Partenariats avec marques cosmétiques
+--------------------------------------------------------------------------------
+
+
+INSTRUCTIONS POUR CANVA:
+1. Créez une nouvelle slide dans Canva
+2. Ajoutez le titre ci-dessus
+4. Ajoutez les 6 points de contenu comme puces
+5. Personnalisez le design selon vos préférences
+
+================================================================================
+
+
+================================================================================
+SLIDE 28: Avantages Concurrentiels
+================================================================================
+
+Type: COMPETITIVE
+
+CONTENU (copier chaque ligne):
+--------------------------------------------------------------------------------
+1. 5 modèles ML intégrés (vs 1-2 pour concurrents)
+2. Assistant IA conversationnel avancé
+3. Recommandations ultra-personnalisées
+4. Interface moderne et intuitive
+5. Gratuit et accessible à tous
+6. Open source et extensible
+--------------------------------------------------------------------------------
+
+
+INSTRUCTIONS POUR CANVA:
+1. Créez une nouvelle slide dans Canva
+2. Ajoutez le titre ci-dessus
+4. Ajoutez les 6 points de contenu comme puces
+5. Personnalisez le design selon vos préférences
+
+================================================================================
+
+
+================================================================================
+SLIDE 29: Impact et Bénéfices
+================================================================================
+
+Type: IMPACT
+
+CONTENU (copier chaque ligne):
+--------------------------------------------------------------------------------
+1. Démocratisation des soins dermatologiques
+2. Économies pour les utilisateurs
+3. Meilleure compréhension de sa peau
+4. Choix de produits plus éclairés
+5. Prévention des problèmes cutanés
+6. Amélioration de la confiance en soi
+--------------------------------------------------------------------------------
+
+
+INSTRUCTIONS POUR CANVA:
+1. Créez une nouvelle slide dans Canva
+2. Ajoutez le titre ci-dessus
+4. Ajoutez les 6 points de contenu comme puces
+5. Personnalisez le design selon vos préférences
+
+================================================================================
+
+
+================================================================================
+SLIDE 30: Conclusion
+================================================================================
+
+Type: CONCLUSION
+
+CONTENU (copier chaque ligne):
+--------------------------------------------------------------------------------
+1. Skin-Twin-AI combine IA et dermatologie
+2. Solution complète et accessible
+3. Technologie de pointe au service de tous
+4. Évolution continue grâce au feedback utilisateurs
+5. Rejoignez la révolution des soins de la peau intelligents
+--------------------------------------------------------------------------------
+
+
+INSTRUCTIONS POUR CANVA:
+1. Créez une nouvelle slide dans Canva
+2. Ajoutez le titre ci-dessus
+4. Ajoutez les 5 points de contenu comme puces
+5. Personnalisez le design selon vos préférences
+
+================================================================================
+
+
+================================================================================
+SLIDE 31: Remerciements
+================================================================================
+
+Type: THANKS
+
+CONTENU (copier chaque ligne):
+--------------------------------------------------------------------------------
+1. Groq pour l'API IA
+2. Material-UI pour les composants
+3. Django et React communities
+4. Ultralytics pour YOLOv8
+5. Tous les contributeurs open source
+6. Merci de votre attention !
+--------------------------------------------------------------------------------
+
+
+INSTRUCTIONS POUR CANVA:
+1. Créez une nouvelle slide dans Canva
+2. Ajoutez le titre ci-dessus
+4. Ajoutez les 6 points de contenu comme puces
+5. Personnalisez le design selon vos préférences
+
+================================================================================
+
+
+================================================================================
+SLIDE 32: Contact et Ressources
+================================================================================
+
+Type: CONTACT
+
+CONTENU (copier chaque ligne):
+--------------------------------------------------------------------------------
+1. GitHub: github.com/skin-twin-ai
+2. Documentation complète disponible
+3. Guide de démarrage rapide
+4. Support technique disponible
+5. Développé par Mohamed Sayari
+6. Licence MIT
+--------------------------------------------------------------------------------
+
+
+INSTRUCTIONS POUR CANVA:
+1. Créez une nouvelle slide dans Canva
+2. Ajoutez le titre ci-dessus
+4. Ajoutez les 6 points de contenu comme puces
+5. Personnalisez le design selon vos préférences
+
+================================================================================

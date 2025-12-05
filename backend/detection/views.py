@@ -8,6 +8,21 @@ from .models import SkinAnalysis, SegmentationResult
 from .services import skin_analysis_service
 from .serializers import SkinAnalysisSerializer, SegmentationResultSerializer
 import time
+import logging
+
+# Import MLOps (optionnel)
+try:
+    import sys
+    from pathlib import Path
+    BASE_DIR = Path(__file__).parent.parent.parent.parent
+    sys.path.insert(0, str(BASE_DIR))
+    from mlops.integration.django_integration import mlops_integration
+    MLOPS_ENABLED = True
+except ImportError:
+    MLOPS_ENABLED = False
+    mlops_integration = None
+
+logger = logging.getLogger(__name__)
 
 
 class SkinAnalysisUploadView(APIView):
@@ -42,8 +57,27 @@ class SkinAnalysisUploadView(APIView):
             
             # Analyser l'image
             start_time = time.time()
-            results = skin_analysis_service.analyze_skin(skin_analysis.image.path)
+            results = skin_analysis_service.analyze_skin(
+                skin_analysis.image.path, 
+                user=request.user
+            )
             processing_time = time.time() - start_time
+            
+            # MLOps: Logger la prédiction et tracker les performances
+            if MLOPS_ENABLED and mlops_integration:
+                try:
+                    mlops_integration.track_inference_performance('ensemble', processing_time)
+                    mlops_integration.log_prediction_for_monitoring(
+                        prediction={
+                            'skin_type': results['skin_type']['prediction'],
+                            'confidence': results['skin_type']['confidence'],
+                            'detections': results['detections'],
+                            'analysis_id': skin_analysis.id
+                        },
+                        model_name='ensemble'
+                    )
+                except Exception as e:
+                    logger.warning(f"MLOps logging failed: {e}")
             
             # Mettre à jour l'analyse avec les résultats
             skin_analysis.skin_type_prediction = results['skin_type']['prediction']
@@ -70,7 +104,12 @@ class SkinAnalysisUploadView(APIView):
             
             # Sauvegarder les résultats bruts
             skin_analysis.raw_cnn_results = results['skin_type']
-            skin_analysis.raw_yolo_results = detections
+            # Stocker les détections agrégées ET les détections individuelles avec coordonnées
+            raw_yolo_data = {
+                'aggregated': detections,  # Détections agrégées par type de problème
+                'detections': results.get('raw_results', {}).get('detections', [])  # Détections individuelles avec coordonnées
+            }
+            skin_analysis.raw_yolo_results = raw_yolo_data
             
             skin_analysis.save()
             
