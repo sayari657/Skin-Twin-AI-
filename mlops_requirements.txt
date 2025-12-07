@@ -16,7 +16,7 @@ prometheus-client>=0.18.0
 
 # Tests et validation
 pytest>=7.4.0
-pytest-mlflow>=0.1.0
+# pytest-mlflow>=0.1.0  # Package n'existe pas sur PyPI - supprimé
 great-expectations>=0.18.0
 
 # Utilitaires
