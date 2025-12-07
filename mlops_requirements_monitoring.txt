@@ -1,0 +1,22 @@
+# MLOps Requirements MINIMALES pour Monitoring GitHub Actions
+# ============================================================
+# Seulement les dépendances nécessaires pour le monitoring
+# Pas de PyTorch, Ultralytics, etc. (trop lourds pour CI/CD)
+
+# MLflow pour tracking (léger sans extras)
+mlflow>=2.8.0
+
+# Monitoring de base
+scipy>=1.11.0
+scikit-learn>=1.3.0
+numpy>=1.24.0
+pandas>=2.0.0
+
+# Utilitaires essentiels
+pyyaml>=6.0
+python-dotenv>=1.0.0
+joblib>=1.2.0
+
+# Note: Les dépendances lourdes (torch, ultralytics, etc.) 
+# ne sont nécessaires que pour le training, pas pour le monitoring
+
