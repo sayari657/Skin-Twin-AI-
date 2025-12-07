@@ -83,7 +83,7 @@ class InferencePipeline:
         if not self.models.get('efficientnet'):
             raise ValueError("EfficientNet model not loaded")
         
-        # TODO: Implémenter la prédiction EfficientNet
+        # TODO: Implémenter la prédiction EfficientNetB0
         # Pour l'instant, retourner un résultat simulé
         return {'skin_type': 'Normal', 'confidence': 0.95}
     
@@ -94,4 +94,8 @@ class InferencePipeline:
         
         # TODO: Implémenter la prédiction XGBoost
         return {'corrected_prediction': 'Normal', 'confidence': 0.93}
+    
+
+
+
 
