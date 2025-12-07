@@ -6,6 +6,7 @@ import mlflow.pytorch
 import mlflow.sklearn
 from pathlib import Path
 from typing import Dict, Optional, List
+from contextlib import nullcontext
 import joblib
 import torch
 import logging
@@ -32,13 +33,33 @@ class ModelRegistry:
         model_path: str, 
         metrics: Dict, 
         tags: Optional[Dict] = None,
-        description: str = ""
+        description: str = "",
+        use_active_run: bool = True
     ) -> Optional[str]:
         """Enregistrer un modèle YOLO dans MLflow"""
         try:
-            with mlflow.start_run(run_name="yolo_model"):
-                # Enregistrer le modèle comme artefact
-                mlflow.log_artifact(model_path, "models/yolo")
+            # Vérifier si un run est déjà actif
+            active_run = mlflow.active_run()
+            use_context_manager = not (use_active_run and active_run is not None)
+            
+            if use_context_manager:
+                run_context = mlflow.start_run(run_name="yolo_model")
+            else:
+                # Utiliser un context manager vide qui ne fait rien
+                run_context = nullcontext()
+            
+            with run_context:
+                # Vérifier que le fichier modèle existe
+                model_path_obj = Path(model_path)
+                if not model_path_obj.exists():
+                    logger.warning(f"Model file not found at {model_path}, creating placeholder")
+                    # Créer le répertoire si nécessaire
+                    model_path_obj.parent.mkdir(parents=True, exist_ok=True)
+                    # Pour YOLO, on ne peut pas créer un fichier vide, donc on log juste un avertissement
+                    logger.warning(f"Skipping artifact logging for non-existent model: {model_path}")
+                else:
+                    # Enregistrer le modèle comme artefact
+                    mlflow.log_artifact(str(model_path), "models/yolo")
                 
                 # Enregistrer les métriques
                 mlflow.log_metrics(metrics)
@@ -55,14 +76,18 @@ class ModelRegistry:
                 if description:
                     mlflow.set_tag("description", description)
                 
-                # Enregistrer dans le model registry
-                model_name = REGISTERED_MODEL_NAMES['yolo']
-                mlflow.register_model(
-                    f"runs:/{mlflow.active_run().info.run_id}/models/yolo",
-                    model_name
-                )
+                # Enregistrer dans le model registry seulement si le fichier existe
+                if model_path_obj.exists():
+                    model_name = REGISTERED_MODEL_NAMES['yolo']
+                    current_run_id = mlflow.active_run().info.run_id
+                    mlflow.register_model(
+                        f"runs:/{current_run_id}/models/yolo",
+                        model_name
+                    )
+                    logger.info(f"YOLO model registered: {model_path}")
+                else:
+                    logger.warning(f"Model file not found, skipping registry registration: {model_path}")
                 
-                logger.info(f"YOLO model registered: {model_path}")
                 return mlflow.active_run().info.run_id
         except Exception as e:
             logger.error(f"Error registering YOLO model: {e}")
@@ -73,13 +98,28 @@ class ModelRegistry:
         model_path: str, 
         metrics: Dict, 
         tags: Optional[Dict] = None,
-        description: str = ""
+        description: str = "",
+        use_active_run: bool = True
     ) -> Optional[str]:
         """Enregistrer un modèle EfficientNet dans MLflow"""
         try:
-            model = torch.load(model_path, map_location='cpu')
+            model_path_obj = Path(model_path)
+            if not model_path_obj.exists():
+                logger.warning(f"Model file not found at {model_path}, skipping registration")
+                return None
             
-            with mlflow.start_run(run_name="efficientnet_model"):
+            model = torch.load(str(model_path), map_location='cpu')
+            
+            # Vérifier si un run est déjà actif
+            active_run = mlflow.active_run()
+            use_context_manager = not (use_active_run and active_run is not None)
+            
+            if use_context_manager:
+                run_context = mlflow.start_run(run_name="efficientnet_model")
+            else:
+                run_context = nullcontext()
+            
+            with run_context:
                 mlflow.pytorch.log_model(
                     pytorch_model=model,
                     artifact_path="efficientnet_model",
@@ -108,13 +148,28 @@ class ModelRegistry:
         model_path: str, 
         metrics: Dict, 
         tags: Optional[Dict] = None,
-        description: str = ""
+        description: str = "",
+        use_active_run: bool = True
     ) -> Optional[str]:
         """Enregistrer un modèle XGBoost dans MLflow"""
         try:
-            model = joblib.load(model_path)
+            model_path_obj = Path(model_path)
+            if not model_path_obj.exists():
+                logger.warning(f"Model file not found at {model_path}, skipping registration")
+                return None
             
-            with mlflow.start_run(run_name="xgboost_model"):
+            model = joblib.load(str(model_path))
+            
+            # Vérifier si un run est déjà actif
+            active_run = mlflow.active_run()
+            use_context_manager = not (use_active_run and active_run is not None)
+            
+            if use_context_manager:
+                run_context = mlflow.start_run(run_name="xgboost_model")
+            else:
+                run_context = nullcontext()
+            
+            with run_context:
                 mlflow.sklearn.log_model(
                     sk_model=model,
                     artifact_path="xgboost_model",

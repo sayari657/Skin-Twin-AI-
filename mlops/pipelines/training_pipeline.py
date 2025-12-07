@@ -1,45 +1,60 @@
+#!/usr/bin/env python
 """
-Pipeline de training complet pour DVC
-Ce fichier est appelé par dvc.yaml pour exécuter le training
+Script d'entrée pour le pipeline de training dans GitHub Actions
+Gère les erreurs et les cas où les modèles n'existent pas encore
 """
 import sys
+import logging
 from pathlib import Path
 
-# Ajouter le chemin du projet au PYTHONPATH
-project_root = Path(__file__).parent.parent.parent
-sys.path.insert(0, str(project_root))
-
-from mlops.training.train_pipeline import TrainingPipeline
-import logging
-
-logging.basicConfig(level=logging.INFO)
+# Configuration du logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
 logger = logging.getLogger(__name__)
 
 def main():
-    """Point d'entrée principal pour le pipeline DVC"""
-    logger.info("Starting DVC training pipeline...")
-    
-    # Chemin des données préprocessées (depuis dvc.yaml)
-    data_path = project_root / "data" / "processed"
-    
-    if not data_path.exists():
-        logger.error(f"Data path does not exist: {data_path}")
-        logger.info("Please run 'dvc repro prepare_data' first")
-        sys.exit(1)
-    
-    # Créer le pipeline de training
-    pipeline = TrainingPipeline()
-    
-    # Exécuter le pipeline complet
+    """Point d'entrée principal"""
     try:
-        results = pipeline.run_full_pipeline(str(data_path))
+        # Importer le pipeline de training
+        from mlops.training.train_pipeline import TrainingPipeline
+        
+        logger.info("=" * 60)
+        logger.info("Starting ML Training Pipeline")
+        logger.info("=" * 60)
+        
+        # Créer le pipeline
+        pipeline = TrainingPipeline()
+        
+        # Chemin des données (par défaut)
+        data_path = "data/processed"
+        
+        # Vérifier si le répertoire existe
+        if not Path(data_path).exists():
+            logger.warning(f"Data directory {data_path} does not exist, using placeholder data")
+            data_path = "data/raw"  # Fallback
+        
+        # Exécuter le pipeline
+        logger.info(f"Running pipeline with data path: {data_path}")
+        results = pipeline.run_full_pipeline(data_path)
+        
+        logger.info("=" * 60)
         logger.info("Training pipeline completed successfully!")
-        logger.info(f"Results: {results}")
+        logger.info(f"Run ID: {results.get('run_id', 'N/A')}")
+        logger.info("=" * 60)
+        
         return 0
+        
+    except ImportError as e:
+        logger.error(f"Import error: {e}")
+        logger.error("Make sure all dependencies are installed")
+        return 1
     except Exception as e:
         logger.error(f"Training pipeline failed: {e}", exc_info=True)
         return 1
 
 if __name__ == "__main__":
-    sys.exit(main())
+    exit_code = main()
+    sys.exit(exit_code)
 

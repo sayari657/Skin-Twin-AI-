@@ -27,7 +27,9 @@ echo.
 echo Fichiers a ajouter :
 echo   - mlops_requirements.txt (pytest-mlflow supprime)
 echo   - .github/workflows/ml_monitoring.yml (Actions v4)
-echo   - .github/workflows/ml_training.yml (Actions v4 + cache pip)
+echo   - .github/workflows/ml_training.yml (Actions v4 + cache pip + fix MLflow)
+echo   - mlops/deployment/model_registry.py (Fix runs imbriques MLflow)
+echo   - mlops/pipelines/training_pipeline.py (Script d'entree)
 echo   - Fichiers de documentation
 echo.
 
@@ -51,6 +53,16 @@ if %errorlevel% neq 0 (
     echo ATTENTION: Erreur lors de l'ajout des scripts MLOps
 )
 
+git add mlops/deployment/model_registry.py
+if %errorlevel% neq 0 (
+    echo ATTENTION: Erreur lors de l'ajout de model_registry.py
+)
+
+git add mlops/pipelines/training_pipeline.py
+if %errorlevel% neq 0 (
+    echo ATTENTION: Erreur lors de l'ajout de training_pipeline.py
+)
+
 git add mlops_requirements_monitoring.txt
 if %errorlevel% neq 0 (
     echo ATTENTION: Erreur lors de l'ajout de mlops_requirements_monitoring.txt
@@ -70,7 +82,7 @@ echo.
 
 echo [ETAPE 3/4] Commit des changements...
 echo.
-git commit -m "Fix: Update GitHub Actions to v4 and remove pytest-mlflow dependency"
+git commit -m "Fix: Update GitHub Actions to v4, remove pytest-mlflow, and fix MLflow nested runs"
 if %errorlevel% neq 0 (
     echo.
     echo ATTENTION: Le commit a echoue
@@ -141,6 +153,11 @@ echo.
 echo 4. Workflow ML Monitoring optimise :
 echo    - Dependances minimales (50MB au lieu de 4-5GB)
 echo    - Temps d'execution reduit de 60min a 5-10min
+echo.
+echo 5. Fix MLflow nested runs :
+echo    - Plus d'erreur de runs imbriques
+echo    - Gestion des fichiers manquants
+echo    - Script d'entree pour le workflow
 echo.
 echo ========================================
 echo   PROCHAINES ETAPES
