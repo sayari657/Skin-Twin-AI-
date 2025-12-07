@@ -1,5 +1,5 @@
 """
-Modèle CNN pour la classification du type de peau
+Modèle CNN pour la classification du type de peau (oily, dry, normal)
 """
 import torch
 import torch.nn as nn
