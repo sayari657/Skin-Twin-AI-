@@ -1,0 +1,33 @@
+========================================
+COMMANDES GIT POUR CORRIGER LE WORKFLOW
+========================================
+
+Copiez et collez ces commandes une par une dans PowerShell :
+
+1. Ajouter les fichiers corrigés :
+   git add mlops_requirements.txt .github/workflows/ml_training.yml FIX_TRAINING_WORKFLOW.md
+
+2. Faire le commit :
+   git commit -m "Fix: Remove non-existent pytest-mlflow dependency"
+
+3. Push vers GitHub :
+   git push origin main
+
+========================================
+ALTERNATIVE : Si vous avez déjà un commit en attente
+========================================
+
+Si vous voyez "Your branch is ahead of 'origin/main' by 1 commit",
+vous pouvez simplement faire :
+
+   git push origin main
+
+Cela poussera le commit précédent.
+
+========================================
+VÉRIFICATION
+========================================
+
+Après le push, allez sur GitHub Actions et relancez le workflow
+"ML Training Pipeline". Il devrait maintenant fonctionner sans erreur.
+
